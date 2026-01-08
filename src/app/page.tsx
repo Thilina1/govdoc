@@ -30,8 +30,8 @@ export default function Home() {
             className="object-cover absolute inset-0 z-0"
             data-ai-hint="people using phone"
           />
-          <div className="container mx-auto px-4 relative z-10">
-            <div className="grid md:grid-cols-2 gap-8 items-center min-h-[600px]">
+          <div className="container mx-auto px-4 relative z-10 flex items-center min-h-screen">
+            <div className="grid md:grid-cols-2 gap-8 items-center">
               <div className="space-y-6">
                 <h1 className="text-5xl md:text-6xl font-bold leading-tight">
                   Your improved digital ID to make life easy
