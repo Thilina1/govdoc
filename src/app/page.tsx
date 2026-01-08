@@ -43,7 +43,7 @@ export default function Home() {
                   <Button variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-black">
                      <Apple className="mr-2 h-5 w-5" /> Download on the App Store
                   </Button>
-                   <Button variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-black">
+                   <Button variant="outline" className="bg-white/10 border-white text-white hover:bg-white hover:text-black">
                      <Smartphone className="mr-2 h-5 w-5" /> GET IT ON Google Play
                   </Button>
                 </div>
