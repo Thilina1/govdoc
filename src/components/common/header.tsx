@@ -43,7 +43,7 @@ export default function Header({ scrollTo, servicesRef }: { scrollTo: (ref: any)
            <Button asChild className={cn(isScrolled ? 'bg-primary hover:bg-primary/90 text-primary-foreground' : 'bg-white/20 hover:bg-white/30 text-white')} >
               <Link href="/login">Login</Link>
             </Button>
-            <Button variant="outline" asChild className={cn(isScrolled ? 'border-primary text-primary hover:bg-primary/10' : 'border-white text-white hover:bg-white hover:text-primary')}>
+            <Button variant="outline" asChild className={cn(isScrolled ? 'border-primary text-primary hover:bg-primary hover:text-primary-foreground' : 'border-white text-white hover:bg-white hover:text-black')}>
               <Link href="/register">Register</Link>
             </Button>
         </nav>
