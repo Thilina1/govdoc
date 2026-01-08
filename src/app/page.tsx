@@ -46,9 +46,6 @@ export default function Home() {
                    <Button variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-black">
                      <Smartphone className="mr-2 h-5 w-5" /> GET IT ON Google Play
                   </Button>
-                   <Button variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-black">
-                     <TabletSmartphone className="mr-2 h-5 w-5" /> EXPLORE IT ON AppGallery
-                  </Button>
                 </div>
               </div>
               <div>
