@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Search, CreditCard, FileText, Banknote, ShieldCheck, Lock, FolderLock } from 'lucide-react';
+import { Search, CreditCard, FileText, Banknote, ShieldCheck, Lock, FolderLock, Apple, TabletSmartphone, Smartphone } from 'lucide-react';
 import Header from '@/components/common/header';
 import Footer from '@/components/common/footer';
 import Link from 'next/link';
@@ -22,35 +22,39 @@ export default function Home() {
       <Header scrollTo={scrollTo} servicesRef={servicesRef} />
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative text-center py-20 px-4 h-[500px] flex flex-col items-center justify-center text-white">
-          <Image
-            src="https://picsum.photos/seed/govdocs/1200/500"
+        <section className="relative text-white bg-red-600">
+           <Image
+            src="/Hero_landing_desktop.webp"
             alt="Hero background"
             fill
             className="object-cover absolute inset-0 z-0"
-            data-ai-hint="cityscape building"
+            data-ai-hint="people using phone"
           />
-          <div className="absolute inset-0 bg-black/50 z-10"></div>
-          <div className="relative z-20 max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-5xl font-bold">
-              Secure Document Access for Every Citizen
-            </h1>
-            <p className="mt-4 text-lg md:text-xl text-white/90">
-              Your reliable gateway to official government services, simplified and secured.
-            </p>
-            <div className="mt-8 max-w-lg mx-auto">
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input
-                  type="search"
-                  placeholder="Search for a service..."
-                  className="w-full pl-12 pr-4 py-6 rounded-md border-2 border-transparent focus:border-primary focus:ring-primary/50 text-foreground"
-                />
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="grid md:grid-cols-2 gap-8 items-center min-h-[600px]">
+              <div className="space-y-6">
+                <h1 className="text-5xl md:text-6xl font-bold leading-tight">
+                  Your improved digital ID to make life easy
+                </h1>
+                <p className="text-lg md:text-xl text-white/90">
+                  GovDocs LK is your trusted digital identity for all the secure transaction needs in your everyday life.
+                </p>
+                <div className="flex space-x-4 pt-4">
+                  <Button variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-black">
+                     <Apple className="mr-2 h-5 w-5" /> Download on the App Store
+                  </Button>
+                   <Button variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-black">
+                     <Smartphone className="mr-2 h-5 w-5" /> GET IT ON Google Play
+                  </Button>
+                   <Button variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-black">
+                     <TabletSmartphone className="mr-2 h-5 w-5" /> EXPLORE IT ON AppGallery
+                  </Button>
+                </div>
+              </div>
+              <div>
+                {/* This div is intentionally left empty to allow the background image to show through on the right side */}
               </div>
             </div>
-             <Button asChild className="mt-6 bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg py-6 px-8 rounded-full">
-                <Link href="/login">Login with GovDocs</Link>
-             </Button>
           </div>
         </section>
 
