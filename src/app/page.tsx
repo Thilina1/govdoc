@@ -55,6 +55,15 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Promo Section */}
+        <section className="bg-black text-white py-16">
+          <div className="container mx-auto px-4 text-center">
+            <h2 className="text-3xl md:text-4xl font-bold max-w-4xl mx-auto">
+              Access over 2,700 services by over 800 government agencies and businesses at your fingertips
+            </h2>
+          </div>
+        </section>
+
         {/* Services Section */}
         <section ref={servicesRef} className="py-20 px-4 bg-white" id="services">
           <div className="container mx-auto">
