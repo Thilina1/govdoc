@@ -21,7 +21,7 @@ export default function Home() {
       <Header scrollTo={scrollTo} servicesRef={servicesRef} />
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative text-white bg-red-600">
+        <section className="relative text-white bg-red-600 -mt-20">
            <Image
             src="/Hero_landing_desktop.webp"
             alt="Hero background"
@@ -29,7 +29,8 @@ export default function Home() {
             className="object-cover absolute inset-0 z-0"
             data-ai-hint="people using phone"
           />
-          <div className="container mx-auto px-4 relative z-10 flex items-center min-h-screen">
+          <div className="absolute inset-0 bg-black/50 z-0"></div>
+          <div className="container mx-auto px-4 relative z-10 flex items-center min-h-screen pt-20">
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div className="space-y-6">
                 <h1 className="text-5xl md:text-6xl font-bold leading-tight">
