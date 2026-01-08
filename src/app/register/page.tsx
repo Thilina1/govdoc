@@ -1,15 +1,19 @@
+'use client';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import Image from 'next/image';
+
 
 export default function RegisterPage() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-background">
-      <Card className="mx-auto max-w-sm w-full shadow-lg rounded-xl">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl text-primary">Create an Account</CardTitle>
+      <Card className="mx-auto max-w-sm w-full shadow-lg rounded-xl border">
+        <CardHeader className="text-center space-y-4">
+          <Image src="/logo.png" alt="GovDocs LK Logo" width={60} height={60} className="mx-auto" data-ai-hint="logo" />
+          <CardTitle className="text-2xl text-foreground">Create an Account</CardTitle>
           <CardDescription>
             Join GovDocs LK to streamline your document processes.
           </CardDescription>
@@ -39,13 +43,13 @@ export default function RegisterPage() {
               <Label htmlFor="password">Password</Label>
               <Input id="password" type="password" />
             </div>
-            <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
+            <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-full">
               Create Account
             </Button>
           </div>
-          <div className="mt-4 text-center text-sm">
+          <div className="mt-6 text-center text-sm">
             Already have an account?{' '}
-            <Link href="/login" className="underline text-accent-foreground">
+            <Link href="/login" className="underline text-primary font-medium">
               Sign in
             </Link>
           </div>
