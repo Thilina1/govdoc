@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { ThemeToggle } from '@/components/theme-toggle';
+import LanguageSwitcher from '@/components/language-switcher';
 
 export default function Header({ scrollTo, servicesRef }: { scrollTo: (ref: any) => void; servicesRef: React.RefObject<HTMLDivElement> }) {
   
@@ -25,7 +25,7 @@ export default function Header({ scrollTo, servicesRef }: { scrollTo: (ref: any)
           </Link>
         </nav>
         <div className="flex items-center justify-end ml-auto space-x-4">
-          <ThemeToggle />
+          <LanguageSwitcher />
           <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-6">
             <Link href="/login">Login</Link>
           </Button>
