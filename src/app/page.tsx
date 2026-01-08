@@ -56,7 +56,7 @@ export default function Home() {
         </section>
 
         {/* Promo Section */}
-        <section className="bg-black text-white py-16">
+        <section className="bg-black text-white py-24">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl md:text-4xl font-bold max-w-4xl mx-auto">
               Access over 2,700 services by over 800 government agencies and businesses at your fingertips
