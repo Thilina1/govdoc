@@ -3,9 +3,8 @@
 import { useRef } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Search, CreditCard, FileText, Banknote, ShieldCheck, Lock, FolderLock, Apple, TabletSmartphone, Smartphone } from 'lucide-react';
+import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { CreditCard, FileText, Banknote, ShieldCheck, Lock, FolderLock, Apple, TabletSmartphone, Smartphone } from 'lucide-react';
 import Header from '@/components/common/header';
 import Footer from '@/components/common/footer';
 import Link from 'next/link';
@@ -34,10 +33,10 @@ export default function Home() {
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div className="space-y-6">
                 <h1 className="text-5xl md:text-6xl font-bold leading-tight">
-                  Your improved digital ID to make life easy
+                  Sri Lankan Services, Simplified.
                 </h1>
                 <p className="text-lg md:text-xl text-white/90">
-                  GovDocs LK is your trusted digital identity for all the secure transaction needs in your everyday life.
+                  Your central hub for navigating government and banking services. Find clear guides for NIC, passports, digital banking, and more.
                 </p>
                 <div className="flex space-x-4 pt-4">
                   <Button variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-black">
@@ -68,27 +67,27 @@ export default function Home() {
               <Card className="border-0 shadow-none">
                 <CardHeader className="items-center">
                   <CreditCard className="w-16 h-16 text-primary mb-4" />
-                  <CardTitle className="text-xl">Apply for Permits</CardTitle>
+                  <CardTitle className="text-xl">National ID (NIC)</CardTitle>
                   <CardDescription>
-                    Quickly apply for permits with our streamlined online forms.
+                    Guides on the 2026 Digital ID, ICAO photo requirements, and application processes.
                   </CardDescription>
                 </CardHeader>
               </Card>
               <Card className="border-0 shadow-none">
                 <CardHeader className="items-center">
                   <FileText className="w-16 h-16 text-primary mb-4" />
-                  <CardTitle>Access Official Records</CardTitle>
+                  <CardTitle>Passport (K-35 A)</CardTitle>
                   <CardDescription>
-                    Securely view and download your official documents anytime.
+                    Information on the online passport application and biometric centers.
                   </CardDescription>
                 </CardHeader>
               </Card>
               <Card className="border-0 shadow-none">
                 <CardHeader className="items-center">
                   <Banknote className="w-16 h-16 text-primary mb-4" />
-                  <CardTitle>Submit Applications</CardTitle>
+                  <CardTitle>Banking Guides</CardTitle>
                   <CardDescription>
-                    Easily submit applications for various government services.
+                    Learn about digital account opening, personal loans, and Video KYC procedures.
                   </CardDescription>
                 </CardHeader>
               </Card>
@@ -106,27 +105,27 @@ export default function Home() {
               <Card className="bg-transparent border-0 shadow-none items-center">
                 <CardHeader className="items-center">
                   <Lock className="w-16 h-16 text-primary mb-4" />
-                  <CardTitle className="text-xl">End-to-End Encryption</CardTitle>
+                  <CardTitle className="text-xl">Step-by-Step Guides</CardTitle>
                   <CardDescription>
-                    Your data is protected with the highest security standards.
+                    Clear, concise instructions to navigate complex application processes with ease.
                   </CardDescription>
                 </CardHeader>
               </Card>
               <Card className="bg-transparent border-0 shadow-none items-center">
                 <CardHeader className="items-center">
                   <ShieldCheck className="w-16 h-16 text-primary mb-4" />
-                  <CardTitle>Verified Identity</CardTitle>
+                  <CardTitle>Document Checklists</CardTitle>
                   <CardDescription>
-                    We ensure that your identity is verified and secure.
+                    Never miss a document again with our comprehensive checklists for every service.
                   </CardDescription>
                 </CardHeader>
               </Card>
               <Card className="bg-transparent border-0 shadow-none items-center">
                 <CardHeader className="items-center">
                   <FolderLock className="w-16 h-16 text-primary mb-4" />
-                  <CardTitle>24/7 Availability</CardTitle>
+                  <CardTitle>e-Locker Ready</CardTitle>
                   <CardDescription>
-                    Access our services anytime, anywhere, on any device.
+                    Stay informed about the upcoming 2026 government digital document vault.
                   </CardDescription>
                 </CardHeader>
               </Card>
