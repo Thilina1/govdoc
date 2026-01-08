@@ -3,11 +3,12 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 export default function Header({ scrollTo, servicesRef }: { scrollTo: (ref: any) => void; servicesRef: React.RefObject<HTMLDivElement> }) {
   
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-white">
+    <header className="sticky top-0 z-50 w-full border-b bg-background">
       <div className="container flex h-20 items-center">
         <div className="mr-auto flex items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
@@ -24,6 +25,7 @@ export default function Header({ scrollTo, servicesRef }: { scrollTo: (ref: any)
           </Link>
         </nav>
         <div className="flex items-center justify-end ml-auto space-x-4">
+          <ThemeToggle />
           <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-6">
             <Link href="/login">Login</Link>
           </Button>
