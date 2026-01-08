@@ -6,8 +6,8 @@ import { Toaster } from '@/components/ui/toaster';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'GovDoc',
-  description: 'Secure Document Access for Every Citizen',
+  title: 'GovDocs LK',
+  description: 'Sri Lankan Government and Private Sector Documentation Services',
 };
 
 export default function RootLayout({

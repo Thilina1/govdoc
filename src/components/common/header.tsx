@@ -3,32 +3,29 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
-export default function Header({ scrollTo }: { scrollTo: (ref: any) => void }) {
-  // A bit of a hack to get the refs from the parent component
-  const servicesRef = (globalThis as any).document?.querySelector('header')?.servicesRef;
-  const featuresRef = (globalThis as any).document?.querySelector('header')?.featuresRef;
-
+export default function Header({ scrollTo, servicesRef }: { scrollTo: (ref: any) => void; servicesRef: React.RefObject<HTMLDivElement> }) {
+  
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center">
         <div className="mr-auto flex">
           <Link href="/" className="mr-6 flex items-center space-x-2">
-            <span className="font-bold">GovDoc</span>
+            <span className="font-bold text-lg text-primary">GovDocs LK</span>
           </Link>
         </div>
         <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
-          <button onClick={() => scrollTo(servicesRef)} className="transition-colors hover:text-foreground/80">
+          <button onClick={() => scrollTo(servicesRef)} className="transition-colors hover:text-primary">
             Services
           </button>
-          <button onClick={() => scrollTo(featuresRef)} className="transition-colors hover:text-foreground/80">
+          <Link href="#features" className="transition-colors hover:text-primary">
             Features
-          </button>
+          </Link>
         </nav>
-        <div className="flex items-center justify-end ml-auto">
+        <div className="flex items-center justify-end ml-auto space-x-2">
           <Button variant="ghost" asChild>
             <Link href="/login">Login</Link>
           </Button>
-          <Button asChild>
+          <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground">
             <Link href="/register">Register</Link>
           </Button>
         </div>

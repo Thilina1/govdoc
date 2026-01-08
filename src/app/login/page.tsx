@@ -1,42 +1,28 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Mail } from 'lucide-react';
 
 export default function LoginPage() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-background">
-      <Card className="mx-auto max-w-sm">
-        <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
+      <Card className="mx-auto max-w-sm w-full shadow-lg rounded-xl">
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl text-primary">Login to GovDocs LK</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Enter your credentials to access your account
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4">
-            <Button variant="outline" className="w-full">
-              <Image src="/singpass.svg" alt="Singpass" width={24} height={24} className="mr-2" />
-              Login with Singpass
-            </Button>
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">
-                  Or continue with
-                </span>
-              </div>
-            </div>
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 type="email"
-                placeholder="m@example.com"
+                placeholder="email@example.com"
                 required
               />
             </div>
@@ -45,20 +31,23 @@ export default function LoginPage() {
                 <Label htmlFor="password">Password</Label>
                 <Link
                   href="#"
-                  className="ml-auto inline-block text-sm underline"
+                  className="ml-auto inline-block text-sm text-accent-foreground hover:underline"
                 >
-                  Forgot your password?
+                  Forgot password?
                 </Link>
               </div>
               <Input id="password" type="password" required />
             </div>
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
               Login
+            </Button>
+            <Button variant="outline" className="w-full">
+              <Mail className="mr-2 h-4 w-4" /> Continue with Email
             </Button>
           </div>
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{' '}
-            <Link href="/register" className="underline">
+            <Link href="/register" className="underline text-accent-foreground">
               Sign up
             </Link>
           </div>
