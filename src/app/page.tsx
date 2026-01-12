@@ -28,6 +28,21 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const recognitionRef = useRef<any>(null);
   const [micLanguage, setMicLanguage] = useState({ code: 'en-US', name: 'English' });
+  const [placeholder, setPlaceholder] = useState('Ask anything');
+
+  useEffect(() => {
+    switch (micLanguage.code) {
+      case 'si-LK':
+        setPlaceholder('ඕනෑම දෙයක් අසන්න');
+        break;
+      case 'ta-LK':
+        setPlaceholder('எதையும் கேளுங்கள்');
+        break;
+      default:
+        setPlaceholder('Ask anything');
+        break;
+    }
+  }, [micLanguage]);
 
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -160,7 +175,7 @@ export default function Home() {
                   </Button>
                   <Input 
                     type="text"
-                    placeholder="Ask anything"
+                    placeholder={placeholder}
                     className="flex-1 bg-transparent border-none text-white placeholder:text-neutral-400 focus-visible:ring-0 focus-visible:ring-offset-0 text-base h-auto py-5"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
