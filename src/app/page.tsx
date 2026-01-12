@@ -4,7 +4,7 @@ import { useRef, RefObject, useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
-import { CreditCard, FileText, Banknote, ShieldCheck, Lock, FolderLock, Apple, TabletSmartphone, Smartphone, ArrowRight, Plus, Mic } from 'lucide-react';
+import { CreditCard, FileText, Banknote, ShieldCheck, Lock, FolderLock, Apple, TabletSmartphone, Smartphone, ArrowRight, Plus, Mic, ChevronDown } from 'lucide-react';
 import Header from '@/components/common/header';
 import Footer from '@/components/common/footer';
 import Link from 'next/link';
@@ -13,6 +13,12 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 
 export default function Home() {
@@ -21,6 +27,7 @@ export default function Home() {
   const [isRecording, setIsRecording] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const recognitionRef = useRef<any>(null);
+  const [micLanguage, setMicLanguage] = useState({ code: 'en-US', name: 'English' });
 
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -28,7 +35,7 @@ export default function Home() {
       const recognition = new SpeechRecognition();
       recognition.continuous = true;
       recognition.interimResults = true;
-      recognition.lang = 'en-US';
+      recognition.lang = micLanguage.code;
 
       recognition.onresult = (event) => {
         let interimTranscript = '';
@@ -63,7 +70,7 @@ export default function Home() {
     } else {
         // Handle browsers that do not support SpeechRecognition
     }
-  }, [toast]);
+  }, [toast, micLanguage.code]);
 
   const handleMicClick = () => {
     if (!recognitionRef.current) {
@@ -79,6 +86,7 @@ export default function Home() {
       recognitionRef.current.stop();
     } else {
       try {
+        recognitionRef.current.lang = micLanguage.code;
         recognitionRef.current.start();
         setIsRecording(true);
       } catch (error) {
@@ -163,11 +171,30 @@ export default function Home() {
                   <Button 
                     variant="ghost" 
                     size="icon" 
-                    className={cn("text-neutral-400 hover:text-white mr-2", isRecording && 'text-red-500 hover:text-red-400 animate-pulse')}
+                    className={cn("text-neutral-400 hover:text-white", isRecording && 'text-red-500 hover:text-red-400 animate-pulse')}
                     onClick={handleMicClick}
                   >
                     <Mic />
                   </Button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="text-neutral-400 hover:text-white hover:bg-transparent pr-4">
+                        {micLanguage.name}
+                        <ChevronDown className="ml-2 h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="bg-[#1F2123] text-white border-neutral-700">
+                      <DropdownMenuItem onClick={() => setMicLanguage({code: 'en-US', name: 'English'})} className="hover:!bg-neutral-700 focus:!bg-neutral-700 cursor-pointer">
+                        English
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => setMicLanguage({code: 'si-LK', name: 'Sinhala'})} className="hover:!bg-neutral-700 focus:!bg-neutral-700 cursor-pointer">
+                        Sinhala
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => setMicLanguage({code: 'ta-LK', name: 'Tamil'})} className="hover:!bg-neutral-700 focus:!bg-neutral-700 cursor-pointer">
+                        Tamil
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
               </div>
             </div>
