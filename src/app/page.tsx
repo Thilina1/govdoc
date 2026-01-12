@@ -149,54 +149,54 @@ export default function Home() {
         <section className="py-20 px-4 bg-background" id="blog">
           <div className="container mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-12 max-w-2xl mx-auto">
-              We blog about our design and development process
+              Stay Informed on Sri Lanka's Digital Transformation
             </h2>
             <div className="grid md:grid-cols-3 gap-8">
               <Card className="flex flex-col overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
                 {blogImage1 && <Image src={blogImage1.imageUrl} alt={blogImage1.description} width={600} height={400} className="w-full h-48 object-cover" data-ai-hint={blogImage1.imageHint}/>}
                 <CardHeader>
-                  <CardTitle className="text-lg font-bold">Making digital services more accessible for all — Part 1</CardTitle>
+                  <CardTitle className="text-lg font-bold">The 2026 Digital ID: What It Means for You</CardTitle>
                 </CardHeader>
                 <CardContent className="flex-grow">
                   <CardDescription>
-                    Technology is supposed to make life easier, but it may create more problems for us to solve. For example, we need to continuously safeguard our personal data and manage more user IDs.
+                    Sri Lanka is moving towards a digital-first future. Understand the impact of the new digital ID, from online banking to government services, and how to prepare for the change.
                   </CardDescription>
                 </CardContent>
                 <CardFooter>
                   <Link href="#" className="flex items-center text-primary font-medium hover:underline">
-                    Go to article <ArrowRight className="ml-2 h-4 w-4" />
+                    Read more <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </CardFooter>
               </Card>
               <Card className="flex flex-col overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
                 {blogImage2 && <Image src={blogImage2.imageUrl} alt={blogImage2.description} width={600} height={400} className="w-full h-48 object-cover" data-ai-hint={blogImage2.imageHint}/>}
                 <CardHeader>
-                  <CardTitle className="text-lg font-bold">To The Clouds — National Digital Identity</CardTitle>
+                  <CardTitle className="text-lg font-bold">Navigating the Online Passport Application</CardTitle>
                 </CardHeader>
                 <CardContent className="flex-grow">
                   <CardDescription>
-                    "We need to do better," I was thinking to myself while surrounded by chaos. It was hard to believe that just the night before we were celebrating the launch of a new system. At that point, it was an...
+                    The K-35 A form has gone digital. We break down the new online passport application process, offering tips and a step-by-step guide to avoid common pitfalls.
                   </CardDescription>
                 </CardContent>
                 <CardFooter>
                    <Link href="#" className="flex items-center text-primary font-medium hover:underline">
-                    Go to article <ArrowRight className="ml-2 h-4 w-4" />
+                    Read more <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </CardFooter>
               </Card>
               <Card className="flex flex-col overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
                 {blogImage3 && <Image src={blogImage3.imageUrl} alt={blogImage3.description} width={600} height={400} className="w-full h-48 object-cover" data-ai-hint={blogImage3.imageHint}/>}
                 <CardHeader>
-                  <CardTitle className="text-lg font-bold">Critical controls for a DevSecOps practice — Part 1</CardTitle>
+                  <CardTitle className="text-lg font-bold">The Rise of Video KYC in Sri Lankan Banking</CardTitle>
                 </CardHeader>
                 <CardContent className="flex-grow">
                   <CardDescription>
-                    Almost everyone is familiar with Fast and Furious – You'd better build that app fast, or your boss will be furious. We image ourselves building a street racing car, with one mission -- be the first to cross
+                    Opening a bank account from home is now a reality. Learn about the security and convenience of Video Know Your Customer (vKYC) procedures being adopted by local banks.
                   </CardDescription>
                 </CardContent>
                 <CardFooter>
                    <Link href="#" className="flex items-center text-primary font-medium hover:underline">
-                    Go to article <ArrowRight className="ml-2 h-4 w-4" />
+                    Read more <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </CardFooter>
               </Card>
