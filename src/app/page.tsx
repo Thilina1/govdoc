@@ -70,7 +70,7 @@ export default function Home() {
         {/* AI Search Section */}
         <section className="bg-black text-white py-16 pb-12">
           <div className="container mx-auto px-4 flex flex-col items-center text-center">
-            <h2 className="text-3xl font-bold mb-4">Hi there, what's on your mind?</h2>
+            <h2 className="text-3xl font-bold mb-4">How can I help you today?</h2>
             <div className="w-full max-w-2xl mt-4">
               <div className="animated-border-wrapper p-[2px] rounded-[28px]">
                 <div className="relative flex items-center w-full bg-[#1F2123] rounded-[26px]">
@@ -317,6 +317,8 @@ export default function Home() {
     </div>
   );
 }
+
+    
 
     
 
