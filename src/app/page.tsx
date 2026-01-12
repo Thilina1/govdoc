@@ -118,21 +118,21 @@ export default function Home() {
             <h2 className="text-2xl font-bold text-center text-foreground mb-8">
               Trending searches
             </h2>
-            <div className="flex flex-wrap justify-center gap-2">
-              <Link href="#">
-                <Badge variant="outline" className="px-4 py-2 text-base rounded-full hover:bg-accent cursor-pointer">NIC</Badge>
+            <div className="flex flex-wrap justify-center gap-3">
+              <Link href="#" className="transition-transform duration-200 ease-in-out hover:scale-105">
+                <Badge variant="outline" className="px-4 py-2 text-base rounded-full hover:bg-accent cursor-pointer shadow-sm">NIC</Badge>
               </Link>
-              <Link href="#">
-                <Badge variant="outline" className="px-4 py-2 text-base rounded-full hover:bg-accent cursor-pointer">Passport</Badge>
+              <Link href="#" className="transition-transform duration-200 ease-in-out hover:scale-105">
+                <Badge variant="outline" className="px-4 py-2 text-base rounded-full hover:bg-accent cursor-pointer shadow-sm">Passport</Badge>
               </Link>
-              <Link href="#">
-                <Badge variant="outline" className="px-4 py-2 text-base rounded-full hover:bg-accent cursor-pointer">Driving license</Badge>
+              <Link href="#" className="transition-transform duration-200 ease-in-out hover:scale-105">
+                <Badge variant="outline" className="px-4 py-2 text-base rounded-full hover:bg-accent cursor-pointer shadow-sm">Driving license</Badge>
               </Link>
-              <Link href="#">
-                <Badge variant="outline" className="px-4 py-2 text-base rounded-full hover:bg-accent cursor-pointer">Birth certificate</Badge>
+              <Link href="#" className="transition-transform duration-200 ease-in-out hover:scale-105">
+                <Badge variant="outline" className="px-4 py-2 text-base rounded-full hover:bg-accent cursor-pointer shadow-sm">Birth certificate</Badge>
               </Link>
-               <Link href="#">
-                <Badge variant="outline" className="px-4 py-2 text-base rounded-full hover:bg-accent cursor-pointer">Police clearance</Badge>
+               <Link href="#" className="transition-transform duration-200 ease-in-out hover:scale-105">
+                <Badge variant="outline" className="px-4 py-2 text-base rounded-full hover:bg-accent cursor-pointer shadow-sm">Police clearance</Badge>
               </Link>
             </div>
           </div>
@@ -287,5 +287,3 @@ export default function Home() {
     </div>
   );
 }
-
-    
