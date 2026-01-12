@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, RefObject } from 'react';
+import { useRef, RefObject, useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
@@ -11,10 +11,86 @@ import Link from 'next/link';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { useToast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils';
 
 
 export default function Home() {
   const servicesRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
+  const [isRecording, setIsRecording] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const recognitionRef = useRef<any>(null);
+
+  useEffect(() => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
+
+      recognition.onresult = (event) => {
+        let interimTranscript = '';
+        let finalTranscript = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          if (event.results[i].isFinal) {
+            finalTranscript += event.results[i][0].transcript;
+          } else {
+            interimTranscript += event.results[i][0].transcript;
+          }
+        }
+        setSearchQuery(finalTranscript + interimTranscript);
+      };
+
+      recognition.onerror = (event) => {
+        console.error('Speech recognition error', event.error);
+        if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+            toast({
+                variant: 'destructive',
+                title: 'Microphone Access Denied',
+                description: 'Please enable microphone permissions in your browser settings.',
+            });
+        }
+        setIsRecording(false);
+      };
+      
+      recognition.onend = () => {
+        setIsRecording(false);
+      };
+
+      recognitionRef.current = recognition;
+    } else {
+        // Handle browsers that do not support SpeechRecognition
+    }
+  }, [toast]);
+
+  const handleMicClick = () => {
+    if (!recognitionRef.current) {
+        toast({
+            variant: 'destructive',
+            title: 'Unsupported Browser',
+            description: 'Your browser does not support voice recognition.',
+        });
+        return;
+    }
+
+    if (isRecording) {
+      recognitionRef.current.stop();
+    } else {
+      try {
+        recognitionRef.current.start();
+        setIsRecording(true);
+      } catch (error) {
+        console.error("Could not start recognition service: ", error);
+        toast({
+            variant: 'destructive',
+            title: 'Voice Recognition Error',
+            description: 'Could not start voice recognition. Please check your microphone.',
+        });
+      }
+    }
+  };
 
   const scrollTo = (ref: React.RefObject<HTMLDivElement | null>) => {
     ref.current?.scrollIntoView({ behavior: 'smooth' });
@@ -81,8 +157,15 @@ export default function Home() {
                     type="text"
                     placeholder="Ask anything"
                     className="flex-1 bg-transparent border-none text-white placeholder:text-neutral-400 focus-visible:ring-0 focus-visible:ring-offset-0 text-base h-auto py-5"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                   />
-                  <Button variant="ghost" size="icon" className="text-neutral-400 hover:text-white mr-2">
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className={cn("text-neutral-400 hover:text-white mr-2", isRecording && 'text-red-500 hover:text-red-400 animate-pulse')}
+                    onClick={handleMicClick}
+                  >
                     <Mic />
                   </Button>
                 </div>
@@ -317,11 +400,3 @@ export default function Home() {
     </div>
   );
 }
-
-    
-
-    
-
-    
-
-    
