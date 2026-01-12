@@ -88,6 +88,26 @@ export default function Home() {
                 </div>
               </div>
             </div>
+            <div className="mt-8">
+                <h3 className="text-lg font-semibold mb-4 text-neutral-300">Trending searches</h3>
+                 <div className="flex flex-wrap justify-center gap-3">
+                    <Link href="#" className="transition-transform duration-200 ease-in-out hover:scale-105">
+                        <Badge variant="outline" className="px-4 py-2 text-base rounded-full border-neutral-600 text-neutral-300 hover:bg-neutral-800 hover:text-white cursor-pointer shadow-sm">NIC</Badge>
+                    </Link>
+                    <Link href="#" className="transition-transform duration-200 ease-in-out hover:scale-105">
+                        <Badge variant="outline" className="px-4 py-2 text-base rounded-full border-neutral-600 text-neutral-300 hover:bg-neutral-800 hover:text-white cursor-pointer shadow-sm">Passport</Badge>
+                    </Link>
+                    <Link href="#" className="transition-transform duration-200 ease-in-out hover:scale-105">
+                        <Badge variant="outline" className="px-4 py-2 text-base rounded-full border-neutral-600 text-neutral-300 hover:bg-neutral-800 hover:text-white cursor-pointer shadow-sm">Driving license</Badge>
+                    </Link>
+                    <Link href="#" className="transition-transform duration-200 ease-in-out hover:scale-105">
+                        <Badge variant="outline" className="px-4 py-2 text-base rounded-full border-neutral-600 text-neutral-300 hover:bg-neutral-800 hover:text-white cursor-pointer shadow-sm">Birth certificate</Badge>
+                    </Link>
+                    <Link href="#" className="transition-transform duration-200 ease-in-out hover:scale-105">
+                        <Badge variant="outline" className="px-4 py-2 text-base rounded-full border-neutral-600 text-neutral-300 hover:bg-neutral-800 hover:text-white cursor-pointer shadow-sm">Police clearance</Badge>
+                    </Link>
+                </div>
+            </div>
           </div>
         </section>
 
@@ -138,32 +158,6 @@ export default function Home() {
           </div>
         </section>
         
-        {/* Trending Searches Section */}
-        <section className="py-12 bg-background" id="trending">
-          <div className="container mx-auto px-4">
-            <h2 className="text-2xl font-bold text-center text-foreground mb-8">
-              Trending searches
-            </h2>
-            <div className="flex flex-wrap justify-center gap-3">
-              <Link href="#" className="transition-transform duration-200 ease-in-out hover:scale-105">
-                <Badge variant="outline" className="px-4 py-2 text-base rounded-full hover:bg-accent cursor-pointer shadow-sm">NIC</Badge>
-              </Link>
-              <Link href="#" className="transition-transform duration-200 ease-in-out hover:scale-105">
-                <Badge variant="outline" className="px-4 py-2 text-base rounded-full hover:bg-accent cursor-pointer shadow-sm">Passport</Badge>
-              </Link>
-              <Link href="#" className="transition-transform duration-200 ease-in-out hover:scale-105">
-                <Badge variant="outline" className="px-4 py-2 text-base rounded-full hover:bg-accent cursor-pointer shadow-sm">Driving license</Badge>
-              </Link>
-              <Link href="#" className="transition-transform duration-200 ease-in-out hover:scale-105">
-                <Badge variant="outline" className="px-4 py-2 text-base rounded-full hover:bg-accent cursor-pointer shadow-sm">Birth certificate</Badge>
-              </Link>
-               <Link href="#" className="transition-transform duration-200 ease-in-out hover:scale-105">
-                <Badge variant="outline" className="px-4 py-2 text-base rounded-full hover:bg-accent cursor-pointer shadow-sm">Police clearance</Badge>
-              </Link>
-            </div>
-          </div>
-        </section>
-
         {/* Features Section */}
         <section className="py-20 px-4 bg-white" id="features">
           <div className="container mx-auto">
@@ -313,3 +307,5 @@ export default function Home() {
     </div>
   );
 }
+
+    
