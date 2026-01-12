@@ -89,7 +89,7 @@ export default function Home() {
               </div>
             </div>
             <div className="mt-8">
-                <h3 className="text-lg font-semibold mb-4 text-neutral-300">Trending searches</h3>
+                <h3 className="text-base font-normal mb-4 text-neutral-300">Trending searches</h3>
                  <div className="flex flex-wrap justify-center gap-3">
                     <Link href="#" className="transition-transform duration-200 ease-in-out hover:scale-105">
                         <div className="animated-border-wrapper p-[1px] rounded-full">
