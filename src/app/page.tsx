@@ -122,7 +122,7 @@ export default function Home() {
         </section>
 
         {/* Promo Section */}
-        <section className="bg-black text-white pt-12 pb-24 md:pb-32 lg:pb-40">
+        <section className="bg-background text-foreground py-20">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl md:text-4xl font-bold max-w-4xl mx-auto">
               Access over 2,700 services by over 800 government agencies and businesses at your fingertips
@@ -317,6 +317,8 @@ export default function Home() {
     </div>
   );
 }
+
+    
 
     
 
