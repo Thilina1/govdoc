@@ -6,10 +6,10 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import LanguageSwitcher from '@/components/language-switcher';
 import { Menu } from 'lucide-react';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 
-export default function Header({ scrollTo, servicesRef }: { scrollTo: (ref: any) => void; servicesRef: RefObject<HTMLDivElement> }) {
+export default function Header({ scrollTo, servicesRef }: { scrollTo: (ref: any) => void; servicesRef: RefObject<HTMLDivElement | null> }) {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export default function Header({ scrollTo, servicesRef }: { scrollTo: (ref: any)
         </div>
 
         <nav className="hidden md:flex items-center space-x-6 text-sm font-medium ml-auto">
-          <button onClick={() => scrollTo(servicesRef)} className={cn("transition-colors", isScrolled ? "text-foreground/80 hover:text-primary" : "text-white/80 hover:text-white")}>
+           <button onClick={() => scrollTo(servicesRef)} className={cn("transition-colors", isScrolled ? "text-foreground/80 hover:text-primary" : "text-white/80 hover:text-white")}>
             Services
           </button>
           <Link href="#features" className={cn("transition-colors", isScrolled ? "text-foreground/80 hover:text-primary" : "text-white/80 hover:text-white")}>
@@ -43,7 +43,7 @@ export default function Header({ scrollTo, servicesRef }: { scrollTo: (ref: any)
            <Button asChild className={cn(isScrolled ? 'bg-primary hover:bg-primary/90 text-primary-foreground' : 'bg-white/20 hover:bg-white/30 text-white')} >
               <Link href="/login">Login</Link>
             </Button>
-            <Button variant="outline" asChild className={cn(isScrolled ? 'border-primary text-primary hover:bg-primary hover:text-primary-foreground' : 'bg-white/10 border-white text-white hover:bg-white hover:text-black')}>
+            <Button asChild className={cn(isScrolled ? 'bg-primary hover:bg-primary/90 text-primary-foreground' : 'bg-white/10 border-white/20 hover:bg-white/20 text-white')}>
               <Link href="/register">Register</Link>
             </Button>
         </nav>
@@ -58,6 +58,9 @@ export default function Header({ scrollTo, servicesRef }: { scrollTo: (ref: any)
                     </Button>
                 </SheetTrigger>
                 <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-background text-foreground">
+                    <SheetHeader>
+                        <SheetTitle className="sr-only">Menu</SheetTitle>
+                    </SheetHeader>
                     <nav className="flex flex-col gap-4 mt-8">
                          <Link href="/" className="font-bold text-lg">Home</Link>
                          <button onClick={() => scrollTo(servicesRef)} className="font-bold text-lg text-left">
