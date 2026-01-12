@@ -3,11 +3,12 @@
 import { useRef, RefObject } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { CreditCard, FileText, Banknote, ShieldCheck, Lock, FolderLock, Apple, TabletSmartphone, Smartphone } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
+import { CreditCard, FileText, Banknote, ShieldCheck, Lock, FolderLock, Apple, TabletSmartphone, Smartphone, ArrowRight } from 'lucide-react';
 import Header from '@/components/common/header';
 import Footer from '@/components/common/footer';
 import Link from 'next/link';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 export default function Home() {
   const servicesRef = useRef<HTMLDivElement>(null);
@@ -15,6 +16,10 @@ export default function Home() {
   const scrollTo = (ref: React.RefObject<HTMLDivElement>) => {
     ref.current?.scrollIntoView({ behavior: 'smooth' });
   };
+  
+  const blogImage1 = PlaceHolderImages.find(p => p.id === 'blog-1');
+  const blogImage2 = PlaceHolderImages.find(p => p.id === 'blog-2');
+  const blogImage3 = PlaceHolderImages.find(p => p.id === 'blog-3');
 
   return (
     <div className="flex flex-col min-h-screen bg-background font-sans">
@@ -139,6 +144,66 @@ export default function Home() {
             </div>
           </div>
         </section>
+        
+        {/* Blog Section */}
+        <section className="py-20 px-4 bg-background" id="blog">
+          <div className="container mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-12 max-w-2xl mx-auto">
+              We blog about our design and development process
+            </h2>
+            <div className="grid md:grid-cols-3 gap-8">
+              <Card className="flex flex-col overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                {blogImage1 && <Image src={blogImage1.imageUrl} alt={blogImage1.description} width={600} height={400} className="w-full h-48 object-cover" data-ai-hint={blogImage1.imageHint}/>}
+                <CardHeader>
+                  <CardTitle className="text-lg font-bold">Making digital services more accessible for all — Part 1</CardTitle>
+                </CardHeader>
+                <CardContent className="flex-grow">
+                  <CardDescription>
+                    Technology is supposed to make life easier, but it may create more problems for us to solve. For example, we need to continuously safeguard our personal data and manage more user IDs.
+                  </CardDescription>
+                </CardContent>
+                <CardFooter>
+                  <Link href="#" className="flex items-center text-primary font-medium hover:underline">
+                    Go to article <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </CardFooter>
+              </Card>
+              <Card className="flex flex-col overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                {blogImage2 && <Image src={blogImage2.imageUrl} alt={blogImage2.description} width={600} height={400} className="w-full h-48 object-cover" data-ai-hint={blogImage2.imageHint}/>}
+                <CardHeader>
+                  <CardTitle className="text-lg font-bold">To The Clouds — National Digital Identity</CardTitle>
+                </CardHeader>
+                <CardContent className="flex-grow">
+                  <CardDescription>
+                    "We need to do better," I was thinking to myself while surrounded by chaos. It was hard to believe that just the night before we were celebrating the launch of a new system. At that point, it was an...
+                  </CardDescription>
+                </CardContent>
+                <CardFooter>
+                   <Link href="#" className="flex items-center text-primary font-medium hover:underline">
+                    Go to article <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </CardFooter>
+              </Card>
+              <Card className="flex flex-col overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                {blogImage3 && <Image src={blogImage3.imageUrl} alt={blogImage3.description} width={600} height={400} className="w-full h-48 object-cover" data-ai-hint={blogImage3.imageHint}/>}
+                <CardHeader>
+                  <CardTitle className="text-lg font-bold">Critical controls for a DevSecOps practice — Part 1</CardTitle>
+                </CardHeader>
+                <CardContent className="flex-grow">
+                  <CardDescription>
+                    Almost everyone is familiar with Fast and Furious – You'd better build that app fast, or your boss will be furious. We image ourselves building a street racing car, with one mission -- be the first to cross
+                  </CardDescription>
+                </CardContent>
+                <CardFooter>
+                   <Link href="#" className="flex items-center text-primary font-medium hover:underline">
+                    Go to article <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </CardFooter>
+              </Card>
+            </div>
+          </div>
+        </section>
+
       </main>
       <Footer />
     </div>
