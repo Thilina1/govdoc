@@ -68,7 +68,7 @@ export default function Home() {
         </section>
         
         {/* AI Search Section */}
-        <section className="bg-black text-white py-16">
+        <section className="bg-black text-white py-16 pb-12">
           <div className="container mx-auto px-4 flex flex-col items-center text-center">
             <h2 className="text-3xl font-bold mb-4">Hi there, what's on your mind?</h2>
             <div className="w-full max-w-2xl mt-4">
@@ -122,7 +122,7 @@ export default function Home() {
         </section>
 
         {/* Promo Section */}
-        <section className="bg-black text-white py-24 md:py-32 lg:py-40">
+        <section className="bg-black text-white pt-12 pb-24 md:pb-32 lg:pb-40">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl md:text-4xl font-bold max-w-4xl mx-auto">
               Access over 2,700 services by over 800 government agencies and businesses at your fingertips
