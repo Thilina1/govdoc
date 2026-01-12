@@ -151,40 +151,49 @@ export default function Home() {
 
         {/* Testimonials Section */}
         <section className="py-20 bg-background" id="testimonials">
-            <div className="container mx-auto px-4">
-                <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-12 max-w-2xl mx-auto">
-                    Loved by users, trusted by government
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-0.5">
-                    <div className="relative aspect-[4/3]">
-                        {testimonial1 && <Image src={testimonial1.imageUrl} alt={testimonial1.description} layout="fill" objectFit="cover" className="grayscale" data-ai-hint={testimonial1.imageHint}/>}
-                        <div className="absolute inset-0 flex items-end p-8">
-                            <div className="bg-black/80 text-white p-6 relative bubble-bottom-left">
-                                <p className="text-lg">"We also want to be independent and be able to do things by ourselves. Fortunately, the GovDocs app considered many of those accessibility features that the visually-impaired community has mentioned."</p>
-                                <p className="mt-4 font-bold">- Dennis Teo</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="relative aspect-[4/3]">
-                         {testimonial2 && <Image src={testimonial2.imageUrl} alt={testimonial2.description} layout="fill" objectFit="cover" data-ai-hint={testimonial2.imageHint} />}
-                        <div className="absolute inset-0 flex items-end p-8">
-                            <div className="bg-[#B71C1C]/90 text-white p-6 relative bubble-bottom-left">
-                                <p className="text-lg">"The GovDocs app is very convenient and handy with its features! It makes finding any personal details I would need much quicker."</p>
-                                <p className="mt-4 font-bold">- Nikita Choudhary</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="relative aspect-[4/3] md:col-span-2">
-                        {testimonial3 && <Image src={testimonial3.imageUrl} alt={testimonial3.description} layout="fill" objectFit="cover" data-ai-hint={testimonial3.imageHint} />}
-                         <div className="absolute inset-0 flex items-center justify-start p-8 md:w-1/2">
-                            <div className="bg-[#E53935]/90 text-white p-6 relative bubble-left-top">
-                                <p className="text-lg">"With the GovDocs app, I can easily log in to any government website when I want. No need to remember passwords anymore!"</p>
-                                <p className="mt-4 font-bold">- Brigitte Chan</p>
-                            </div>
-                        </div>
-                    </div>
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-12 max-w-2xl mx-auto">
+              Loved by users, trusted by government
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-0.5 bg-background">
+              <div className="relative aspect-w-1 aspect-h-1">
+                {testimonial1 && (
+                  <Image src={testimonial1.imageUrl} alt={testimonial1.description} layout="fill" objectFit="cover" data-ai-hint={testimonial1.imageHint}/>
+                )}
+              </div>
+              <div className="bg-black text-white flex items-center p-8 relative">
+                <div className="relative">
+                  <p className="text-lg relative z-10">"We also want to be independent and be able to do things by ourselves. Fortunately, the GovDocs app considered many of those accessibility features that the visually-impaired community has mentioned."</p>
+                  <p className="mt-4 font-bold relative z-10">- Dennis Teo</p>
+                  <div className="absolute top-1/2 -translate-y-1/2 -left-12 w-0 h-0 border-t-[20px] border-t-transparent border-b-[20px] border-b-transparent border-r-[25px] border-r-black"></div>
                 </div>
+              </div>
+              <div className="bg-[#E53935] text-white flex items-center p-8 relative">
+                <div className="relative">
+                  <p className="text-lg relative z-10">"With the GovDocs app, I can easily log in to any government website when I want. No need to remember passwords anymore!"</p>
+                  <p className="mt-4 font-bold relative z-10">- Brigitte Chan</p>
+                  <div className="absolute top-1/2 -translate-y-1/2 -right-12 w-0 h-0 border-t-[20px] border-t-transparent border-b-[20px] border-b-transparent border-l-[25px] border-l-[#E53935]"></div>
+                </div>
+              </div>
+              <div className="relative aspect-w-1 aspect-h-1">
+                {testimonial3 && (
+                  <Image src={testimonial3.imageUrl} alt={testimonial3.description} layout="fill" objectFit="cover" data-ai-hint={testimonial3.imageHint}/>
+                )}
+              </div>
+              <div className="relative aspect-w-1 aspect-h-1">
+                {testimonial2 && (
+                  <Image src={testimonial2.imageUrl} alt={testimonial2.description} layout="fill" objectFit="cover" data-ai-hint={testimonial2.imageHint}/>
+                )}
+              </div>
+              <div className="bg-[#B71C1C] text-white flex items-center p-8 relative">
+                <div className="relative">
+                  <p className="text-lg relative z-10">"The GovDocs app is very convenient and handy with its features! It makes finding any personal details I would need much quicker."</p>
+                  <p className="mt-4 font-bold relative z-10">- Nikita Choudhary</p>
+                  <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[20px] border-l-transparent border-r-[20px] border-r-transparent border-b-[25px] border-b-[#B71C1C]"></div>
+                </div>
+              </div>
             </div>
+          </div>
         </section>
         
         {/* Blog Section */}
