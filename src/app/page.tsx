@@ -9,6 +9,7 @@ import Header from '@/components/common/header';
 import Footer from '@/components/common/footer';
 import Link from 'next/link';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { Badge } from '@/components/ui/badge';
 
 export default function Home() {
   const servicesRef = useRef<HTMLDivElement>(null);
@@ -65,7 +66,7 @@ export default function Home() {
         </section>
 
         {/* Promo Section */}
-        <section className="bg-black text-white py-24 md:py-40">
+        <section className="bg-black text-white py-24 md:py-32 lg:py-40">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl md:text-4xl font-bold max-w-4xl mx-auto">
               Access over 2,700 services by over 800 government agencies and businesses at your fingertips
@@ -110,9 +111,35 @@ export default function Home() {
             </div>
           </div>
         </section>
+        
+        {/* Trending Searches Section */}
+        <section className="py-12 bg-background" id="trending">
+          <div className="container mx-auto px-4">
+            <h2 className="text-2xl font-bold text-center text-foreground mb-8">
+              Trending searches
+            </h2>
+            <div className="flex flex-wrap justify-center gap-2">
+              <Link href="#">
+                <Badge variant="outline" className="px-4 py-2 text-base rounded-full hover:bg-accent cursor-pointer">NIC</Badge>
+              </Link>
+              <Link href="#">
+                <Badge variant="outline" className="px-4 py-2 text-base rounded-full hover:bg-accent cursor-pointer">Passport</Badge>
+              </Link>
+              <Link href="#">
+                <Badge variant="outline" className="px-4 py-2 text-base rounded-full hover:bg-accent cursor-pointer">Driving license</Badge>
+              </Link>
+              <Link href="#">
+                <Badge variant="outline" className="px-4 py-2 text-base rounded-full hover:bg-accent cursor-pointer">Birth certificate</Badge>
+              </Link>
+               <Link href="#">
+                <Badge variant="outline" className="px-4 py-2 text-base rounded-full hover:bg-accent cursor-pointer">Police clearance</Badge>
+              </Link>
+            </div>
+          </div>
+        </section>
 
         {/* Features Section */}
-        <section className="py-20 px-4 bg-background" id="features">
+        <section className="py-20 px-4 bg-white" id="features">
           <div className="container mx-auto">
             <h2 className="text-3xl font-bold text-center text-foreground mb-12">
               A Platform You Can Trust
@@ -260,3 +287,5 @@ export default function Home() {
     </div>
   );
 }
+
+    
