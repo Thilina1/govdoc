@@ -88,7 +88,6 @@ export default function Home() {
         recognitionRef.current.start();
         setIsRecording(true);
       } catch (error) {
-        console.error("Could not start recognition service: ", error);
         toast({
             variant: 'destructive',
             title: 'Voice Recognition Error',
@@ -185,11 +184,11 @@ export default function Home() {
                       <DropdownMenuItem onClick={() => setMicLanguage({code: 'en-US', name: 'English'})} className="hover:!bg-neutral-700 focus:!bg-neutral-700 cursor-pointer">
                         English
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => setMicLanguage({code: 'si-LK', name: 'Sinhala'})} className="hover:!bg-neutral-700 focus:!bg-neutral-700 cursor-pointer">
-                        Sinhala
+                      <DropdownMenuItem onClick={() => setMicLanguage({code: 'si-LK', name: 'සිංහල'})} className="hover:!bg-neutral-700 focus:!bg-neutral-700 cursor-pointer">
+                        සිංහල
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => setMicLanguage({code: 'ta-LK', name: 'Tamil'})} className="hover:!bg-neutral-700 focus:!bg-neutral-700 cursor-pointer">
-                        Tamil
+                      <DropdownMenuItem onClick={() => setMicLanguage({code: 'ta-LK', name: 'தமிழ்'})} className="hover:!bg-neutral-700 focus:!bg-neutral-700 cursor-pointer">
+                        தமிழ்
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
