@@ -92,19 +92,29 @@ export default function Home() {
                 <h3 className="text-lg font-semibold mb-4 text-neutral-300">Trending searches</h3>
                  <div className="flex flex-wrap justify-center gap-3">
                     <Link href="#" className="transition-transform duration-200 ease-in-out hover:scale-105">
-                        <Badge variant="outline" className="px-4 py-2 text-base rounded-full border-neutral-600 text-neutral-300 hover:bg-neutral-800 hover:text-white cursor-pointer shadow-sm">NIC</Badge>
+                        <div className="animated-border-wrapper p-[1px] rounded-full">
+                           <Badge variant="outline" className="px-4 py-2 text-base rounded-full bg-[#1F2123] border-transparent text-neutral-300 hover:bg-neutral-800/80 hover:text-white cursor-pointer shadow-sm">NIC</Badge>
+                        </div>
                     </Link>
                     <Link href="#" className="transition-transform duration-200 ease-in-out hover:scale-105">
-                        <Badge variant="outline" className="px-4 py-2 text-base rounded-full border-neutral-600 text-neutral-300 hover:bg-neutral-800 hover:text-white cursor-pointer shadow-sm">Passport</Badge>
+                       <div className="animated-border-wrapper p-[1px] rounded-full">
+                         <Badge variant="outline" className="px-4 py-2 text-base rounded-full bg-[#1F2123] border-transparent text-neutral-300 hover:bg-neutral-800/80 hover:text-white cursor-pointer shadow-sm">Passport</Badge>
+                        </div>
                     </Link>
                     <Link href="#" className="transition-transform duration-200 ease-in-out hover:scale-105">
-                        <Badge variant="outline" className="px-4 py-2 text-base rounded-full border-neutral-600 text-neutral-300 hover:bg-neutral-800 hover:text-white cursor-pointer shadow-sm">Driving license</Badge>
+                        <div className="animated-border-wrapper p-[1px] rounded-full">
+                            <Badge variant="outline" className="px-4 py-2 text-base rounded-full bg-[#1F2123] border-transparent text-neutral-300 hover:bg-neutral-800/80 hover:text-white cursor-pointer shadow-sm">Driving license</Badge>
+                        </div>
                     </Link>
                     <Link href="#" className="transition-transform duration-200 ease-in-out hover:scale-105">
-                        <Badge variant="outline" className="px-4 py-2 text-base rounded-full border-neutral-600 text-neutral-300 hover:bg-neutral-800 hover:text-white cursor-pointer shadow-sm">Birth certificate</Badge>
+                        <div className="animated-border-wrapper p-[1px] rounded-full">
+                            <Badge variant="outline" className="px-4 py-2 text-base rounded-full bg-[#1F2123] border-transparent text-neutral-300 hover:bg-neutral-800/80 hover:text-white cursor-pointer shadow-sm">Birth certificate</Badge>
+                        </div>
                     </Link>
                     <Link href="#" className="transition-transform duration-200 ease-in-out hover:scale-105">
-                        <Badge variant="outline" className="px-4 py-2 text-base rounded-full border-neutral-600 text-neutral-300 hover:bg-neutral-800 hover:text-white cursor-pointer shadow-sm">Police clearance</Badge>
+                        <div className="animated-border-wrapper p-[1px] rounded-full">
+                            <Badge variant="outline" className="px-4 py-2 text-base rounded-full bg-[#1F2123] border-transparent text-neutral-300 hover:bg-neutral-800/80 hover:text-white cursor-pointer shadow-sm">Police clearance</Badge>
+                        </div>
                     </Link>
                 </div>
             </div>
@@ -307,5 +317,7 @@ export default function Home() {
     </div>
   );
 }
+
+    
 
     
