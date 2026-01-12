@@ -4,7 +4,6 @@ import { Apple, Smartphone, Globe, ExternalLink } from 'lucide-react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
-  const lastUpdatedDate = `25 Nov ${currentYear}`;
 
   return (
     <footer className="bg-black text-white">
@@ -81,7 +80,7 @@ export default function Footer() {
                 </Link>
             </div>
             <p className="text-center md:text-right">
-              &copy; {currentYear} GovDocs LK. All rights reserved. Last updated {lastUpdatedDate}
+              &copy; {currentYear} GovDocs LK. All rights reserved.
             </p>
           </div>
         </div>
