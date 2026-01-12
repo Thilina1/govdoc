@@ -153,7 +153,7 @@ export default function Home() {
         <section className="py-20 bg-background" id="testimonials">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-12 max-w-2xl mx-auto">
-              Loved by users, trusted by government
+              Hear from our users
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-0.5 bg-background">
               <div className="relative aspect-w-1 aspect-h-1">
