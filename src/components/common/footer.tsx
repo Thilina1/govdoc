@@ -3,6 +3,9 @@ import Image from 'next/image';
 import { Apple, Smartphone, Globe, ExternalLink } from 'lucide-react';
 
 export default function Footer() {
+  const currentYear = new Date().getFullYear();
+  const lastUpdatedDate = `25 Nov ${currentYear}`;
+
   return (
     <footer className="bg-black text-white">
       <div className="container mx-auto py-16 px-4">
@@ -78,7 +81,7 @@ export default function Footer() {
                 </Link>
             </div>
             <p className="text-center md:text-right">
-              &copy; 2024 GovDocs LK. All rights reserved. Last updated 25 Nov 2025
+              &copy; {currentYear} GovDocs LK. All rights reserved. Last updated {lastUpdatedDate}
             </p>
           </div>
         </div>
