@@ -51,7 +51,6 @@ export default function Home() {
       };
 
       recognition.onerror = (event) => {
-        console.error('Speech recognition error', event.error);
         if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
             toast({
                 variant: 'destructive',
