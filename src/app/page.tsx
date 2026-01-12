@@ -28,30 +28,52 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const recognitionRef = useRef<any>(null);
   const [micLanguage, setMicLanguage] = useState({ code: 'en-US', name: 'English' });
-  const [placeholder, setPlaceholder] = useState('Ask anything');
+  
+  const translations = {
+    'en-US': {
+      placeholder: 'Ask anything',
+      trendingSearches: 'Trending searches',
+      nic: 'NIC',
+      passport: 'Passport',
+      drivingLicense: 'Driving license',
+      birthCertificate: 'Birth certificate',
+      policeClearance: 'Police clearance',
+    },
+    'si-LK': {
+      placeholder: 'ඕනෑම දෙයක් අසන්න',
+      trendingSearches: 'ප්‍රවණතා සෙවීම්',
+      nic: 'ජාතික හැඳුනුම්පත',
+      passport: 'විදේශ ගමන් බලපත්‍රය',
+      drivingLicense: 'රියදුරු බලපත්‍රය',
+      birthCertificate: 'උපන් සහතිකය',
+      policeClearance: 'පොලිස් වාර්තාව',
+    },
+    'ta-LK': {
+      placeholder: 'எதையும் கேளுங்கள்',
+      trendingSearches: 'பிரபலமான தேடல்கள்',
+      nic: 'தேசிய அடையாள அட்டை',
+      passport: 'கடவுச்சீட்டு',
+      drivingLicense: 'சாரதி බලපත්‍රය',
+      birthCertificate: 'பிறப்புச் சான்றிதழ்',
+      policeClearance: 'பொலிஸ் அறிக்கை',
+    },
+  };
 
+  const [currentTranslations, setCurrentTranslations] = useState(translations['en-US']);
+  
   useEffect(() => {
-    switch (micLanguage.code) {
-      case 'si-LK':
-        setPlaceholder('ඕනෑම දෙයක් අසන්න');
-        break;
-      case 'ta-LK':
-        setPlaceholder('எதையும் கேளுங்கள்');
-        break;
-      default:
-        setPlaceholder('Ask anything');
-        break;
-    }
+    setCurrentTranslations(translations[micLanguage.code as keyof typeof translations] || translations['en-US']);
   }, [micLanguage]);
+
 
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SpeechRecognition) {
-      const recognition = new SpeechRecognition();
-      recognition.continuous = true;
-      recognition.interimResults = true;
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = true;
+      recognitionRef.current.interimResults = true;
       
-      recognition.onresult = (event) => {
+      recognitionRef.current.onresult = (event: any) => {
         let interimTranscript = '';
         let finalTranscript = '';
         for (let i = event.resultIndex; i < event.results.length; ++i) {
@@ -64,7 +86,7 @@ export default function Home() {
         setSearchQuery(finalTranscript + interimTranscript);
       };
 
-      recognition.onerror = (event) => {
+      recognitionRef.current.onerror = (event: any) => {
         if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
             toast({
                 variant: 'destructive',
@@ -75,11 +97,10 @@ export default function Home() {
         setIsRecording(false);
       };
       
-      recognition.onend = () => {
+      recognitionRef.current.onend = () => {
         setIsRecording(false);
       };
 
-      recognitionRef.current = recognition;
     } else {
         // Handle browsers that do not support SpeechRecognition
     }
@@ -97,12 +118,14 @@ export default function Home() {
 
     if (isRecording) {
       recognitionRef.current.stop();
+      setIsRecording(false);
     } else {
       try {
         recognitionRef.current.lang = micLanguage.code;
         recognitionRef.current.start();
         setIsRecording(true);
       } catch (error) {
+        setIsRecording(false);
         toast({
             variant: 'destructive',
             title: 'Voice Recognition Error',
@@ -175,7 +198,7 @@ export default function Home() {
                   </Button>
                   <Input 
                     type="text"
-                    placeholder={placeholder}
+                    placeholder={currentTranslations.placeholder}
                     className="flex-1 bg-transparent border-none text-white placeholder:text-neutral-400 focus-visible:ring-0 focus-visible:ring-offset-0 text-base h-auto py-5"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -211,31 +234,31 @@ export default function Home() {
               </div>
             </div>
             <div className="mt-8">
-                <h3 className="text-base font-normal mb-4 text-neutral-300">Trending searches</h3>
+                <h3 className="text-base font-normal mb-4 text-neutral-300">{currentTranslations.trendingSearches}</h3>
                  <div className="flex flex-wrap justify-center gap-3">
                     <Link href="#" className="transition-transform duration-200 ease-in-out hover:scale-105">
                         <div className="animated-border-wrapper p-[1px] rounded-full">
-                           <Badge variant="outline" className="px-4 py-2 text-base rounded-full bg-[#1F2123] border-transparent text-neutral-300 hover:bg-neutral-800/80 hover:text-white cursor-pointer shadow-sm">NIC</Badge>
+                           <Badge variant="outline" className="px-4 py-2 text-base rounded-full bg-[#1F2123] border-transparent text-neutral-300 hover:bg-neutral-800/80 hover:text-white cursor-pointer shadow-sm">{currentTranslations.nic}</Badge>
                         </div>
                     </Link>
                     <Link href="#" className="transition-transform duration-200 ease-in-out hover:scale-105">
                        <div className="animated-border-wrapper p-[1px] rounded-full">
-                         <Badge variant="outline" className="px-4 py-2 text-base rounded-full bg-[#1F2123] border-transparent text-neutral-300 hover:bg-neutral-800/80 hover:text-white cursor-pointer shadow-sm">Passport</Badge>
+                         <Badge variant="outline" className="px-4 py-2 text-base rounded-full bg-[#1F2123] border-transparent text-neutral-300 hover:bg-neutral-800/80 hover:text-white cursor-pointer shadow-sm">{currentTranslations.passport}</Badge>
                         </div>
                     </Link>
                     <Link href="#" className="transition-transform duration-200 ease-in-out hover:scale-105">
                         <div className="animated-border-wrapper p-[1px] rounded-full">
-                            <Badge variant="outline" className="px-4 py-2 text-base rounded-full bg-[#1F2123] border-transparent text-neutral-300 hover:bg-neutral-800/80 hover:text-white cursor-pointer shadow-sm">Driving license</Badge>
+                            <Badge variant="outline" className="px-4 py-2 text-base rounded-full bg-[#1F2123] border-transparent text-neutral-300 hover:bg-neutral-800/80 hover:text-white cursor-pointer shadow-sm">{currentTranslations.drivingLicense}</Badge>
                         </div>
                     </Link>
                     <Link href="#" className="transition-transform duration-200 ease-in-out hover:scale-105">
                         <div className="animated-border-wrapper p-[1px] rounded-full">
-                            <Badge variant="outline" className="px-4 py-2 text-base rounded-full bg-[#1F2123] border-transparent text-neutral-300 hover:bg-neutral-800/80 hover:text-white cursor-pointer shadow-sm">Birth certificate</Badge>
+                            <Badge variant="outline" className="px-4 py-2 text-base rounded-full bg-[#1F2123] border-transparent text-neutral-300 hover:bg-neutral-800/80 hover:text-white cursor-pointer shadow-sm">{currentTranslations.birthCertificate}</Badge>
                         </div>
                     </Link>
                     <Link href="#" className="transition-transform duration-200 ease-in-out hover:scale-105">
                         <div className="animated-border-wrapper p-[1px] rounded-full">
-                            <Badge variant="outline" className="px-4 py-2 text-base rounded-full bg-[#1F2123] border-transparent text-neutral-300 hover:bg-neutral-800/80 hover:text-white cursor-pointer shadow-sm">Police clearance</Badge>
+                            <Badge variant="outline" className="px-4 py-2 text-base rounded-full bg-[#1F2123] border-transparent text-neutral-300 hover:bg-neutral-800/80 hover:text-white cursor-pointer shadow-sm">{currentTranslations.policeClearance}</Badge>
                         </div>
                     </Link>
                 </div>
