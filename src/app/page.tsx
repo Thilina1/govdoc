@@ -35,8 +35,7 @@ export default function Home() {
       const recognition = new SpeechRecognition();
       recognition.continuous = true;
       recognition.interimResults = true;
-      recognition.lang = micLanguage.code;
-
+      
       recognition.onresult = (event) => {
         let interimTranscript = '';
         let finalTranscript = '';
@@ -69,7 +68,7 @@ export default function Home() {
     } else {
         // Handle browsers that do not support SpeechRecognition
     }
-  }, [toast, micLanguage.code]);
+  }, [toast]);
 
   const handleMicClick = () => {
     if (!recognitionRef.current) {
