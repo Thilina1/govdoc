@@ -86,3 +86,61 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .bubble-bottom-left:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: -20px;
+    border-style: solid;
+    border-width: 0 20px 20px 0;
+    border-color: transparent transparent transparent;
+    transform: translateY(100%);
+    border-left-color: inherit; /* Use parent's bg color */
+  }
+  .bubble-left-top:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -20px;
+    margin-top: -10px;
+    border-style: solid;
+    border-width: 10px 20px 10px 0;
+    border-color: transparent;
+    border-right-color: inherit;
+  }
+  .bg-black\/80 {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+  .bg-\[\#B71C1C\]\/90 {
+      background-color: rgba(183, 28, 28, 0.9);
+      border-left-color: rgba(183, 28, 28, 0.9);
+  }
+  .bg-\[\#E53935\]\/90 {
+      background-color: rgba(229, 57, 53, 0.9);
+      border-right-color: rgba(229, 57, 53, 0.9);
+  }
+  .bubble-bottom-left::after {
+    content: "";
+    position: absolute;
+    bottom: -20px;
+    left: 2rem; 
+    border-width: 20px 0px 0 20px;
+    border-style: solid;
+    border-color: transparent transparent transparent;
+    border-top-color: inherit;
+    transform: rotate(90deg);
+  }
+  
+  .bubble-left-top::after {
+    content: "";
+    position: absolute;
+    top: 2.5rem;
+    left: -20px;
+    border-width: 15px 20px 15px 0;
+    border-style: solid;
+    border-color: transparent;
+    border-right-color: inherit;
+  }
+}

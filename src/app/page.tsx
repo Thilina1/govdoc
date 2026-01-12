@@ -20,6 +20,10 @@ export default function Home() {
   const blogImage1 = PlaceHolderImages.find(p => p.id === 'blog-1');
   const blogImage2 = PlaceHolderImages.find(p => p.id === 'blog-2');
   const blogImage3 = PlaceHolderImages.find(p => p.id === 'blog-3');
+  const testimonial1 = PlaceHolderImages.find(p => p.id === 'testimonial-1');
+  const testimonial2 = PlaceHolderImages.find(p => p.id === 'testimonial-2');
+  const testimonial3 = PlaceHolderImages.find(p => p.id === 'testimonial-3');
+
 
   return (
     <div className="flex flex-col min-h-screen bg-background font-sans">
@@ -144,22 +148,60 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* Testimonials Section */}
+        <section className="py-20 bg-background" id="testimonials">
+            <div className="container mx-auto px-4">
+                <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-12 max-w-2xl mx-auto">
+                    Loved by users, trusted by government
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-0.5">
+                    <div className="relative aspect-[4/3]">
+                        {testimonial1 && <Image src={testimonial1.imageUrl} alt={testimonial1.description} layout="fill" objectFit="cover" className="grayscale" data-ai-hint={testimonial1.imageHint}/>}
+                        <div className="absolute inset-0 flex items-end p-8">
+                            <div className="bg-black/80 text-white p-6 relative bubble-bottom-left">
+                                <p className="text-lg">"We also want to be independent and be able to do things by ourselves. Fortunately, the GovDocs app considered many of those accessibility features that the visually-impaired community has mentioned."</p>
+                                <p className="mt-4 font-bold">- Dennis Teo</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="relative aspect-[4/3]">
+                         {testimonial2 && <Image src={testimonial2.imageUrl} alt={testimonial2.description} layout="fill" objectFit="cover" data-ai-hint={testimonial2.imageHint} />}
+                        <div className="absolute inset-0 flex items-end p-8">
+                            <div className="bg-[#B71C1C]/90 text-white p-6 relative bubble-bottom-left">
+                                <p className="text-lg">"The GovDocs app is very convenient and handy with its features! It makes finding any personal details I would need much quicker."</p>
+                                <p className="mt-4 font-bold">- Nikita Choudhary</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="relative aspect-[4/3] md:col-span-2">
+                        {testimonial3 && <Image src={testimonial3.imageUrl} alt={testimonial3.description} layout="fill" objectFit="cover" data-ai-hint={testimonial3.imageHint} />}
+                         <div className="absolute inset-0 flex items-center justify-start p-8 md:w-1/2">
+                            <div className="bg-[#E53935]/90 text-white p-6 relative bubble-left-top">
+                                <p className="text-lg">"With the GovDocs app, I can easily log in to any government website when I want. No need to remember passwords anymore!"</p>
+                                <p className="mt-4 font-bold">- Brigitte Chan</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
         
         {/* Blog Section */}
-        <section className="py-20 px-4 bg-background" id="blog">
+        <section className="py-20 px-4 bg-white" id="blog">
           <div className="container mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-12 max-w-2xl mx-auto">
-              Stay Informed on Sri Lanka's Digital Transformation
+              We blog about our design and development process
             </h2>
             <div className="grid md:grid-cols-3 gap-8">
               <Card className="flex flex-col overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
                 {blogImage1 && <Image src={blogImage1.imageUrl} alt={blogImage1.description} width={600} height={400} className="w-full h-48 object-cover" data-ai-hint={blogImage1.imageHint}/>}
                 <CardHeader>
-                  <CardTitle className="text-lg font-bold">The 2026 Digital ID: What It Means for You</CardTitle>
+                  <CardTitle className="text-lg font-bold">Designing for Digital Accessibility</CardTitle>
                 </CardHeader>
                 <CardContent className="flex-grow">
                   <CardDescription>
-                    Sri Lanka is moving towards a digital-first future. Understand the impact of the new digital ID, from online banking to government services, and how to prepare for the change.
+                    How we're building an inclusive platform that empowers all Sri Lankans, including those with disabilities, to access digital services with ease.
                   </CardDescription>
                 </CardContent>
                 <CardFooter>
@@ -171,11 +213,11 @@ export default function Home() {
               <Card className="flex flex-col overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
                 {blogImage2 && <Image src={blogImage2.imageUrl} alt={blogImage2.description} width={600} height={400} className="w-full h-48 object-cover" data-ai-hint={blogImage2.imageHint}/>}
                 <CardHeader>
-                  <CardTitle className="text-lg font-bold">Navigating the Online Passport Application</CardTitle>
+                  <CardTitle className="text-lg font-bold">The SL-ID: A Foundation for Trust</CardTitle>
                 </CardHeader>
                 <CardContent className="flex-grow">
                   <CardDescription>
-                    The K-35 A form has gone digital. We break down the new online passport application process, offering tips and a step-by-step guide to avoid common pitfalls.
+                   A look into the architecture of Sri Lanka's upcoming national digital identity and how our app will integrate with it to provide secure and seamless services.
                   </CardDescription>
                 </CardContent>
                 <CardFooter>
@@ -187,11 +229,11 @@ export default function Home() {
               <Card className="flex flex-col overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
                 {blogImage3 && <Image src={blogImage3.imageUrl} alt={blogImage3.description} width={600} height={400} className="w-full h-48 object-cover" data-ai-hint={blogImage3.imageHint}/>}
                 <CardHeader>
-                  <CardTitle className="text-lg font-bold">The Rise of Video KYC in Sri Lankan Banking</CardTitle>
+                  <CardTitle className="text-lg font-bold">Balancing Security and UX in FinTech</CardTitle>
                 </CardHeader>
                 <CardContent className="flex-grow">
                   <CardDescription>
-                    Opening a bank account from home is now a reality. Learn about the security and convenience of Video Know Your Customer (vKYC) procedures being adopted by local banks.
+                    Our approach to DevSecOps and UX design for banking integrations, ensuring user data is protected without compromising on a smooth, intuitive experience.
                   </CardDescription>
                 </CardContent>
                 <CardFooter>
