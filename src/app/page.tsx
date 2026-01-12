@@ -236,31 +236,31 @@ export default function Home() {
             <div className="mt-8">
                 <h3 className="text-base font-normal mb-4 text-neutral-300">{currentTranslations.trendingSearches}</h3>
                  <div className="flex flex-wrap justify-center gap-3">
-                    <Link href="#" className="transition-transform duration-200 ease-in-out hover:scale-105">
+                    <button onClick={() => setSearchQuery(currentTranslations.nic)} className="transition-transform duration-200 ease-in-out hover:scale-105">
                         <div className="animated-border-wrapper p-[1px] rounded-full">
                            <Badge variant="outline" className="px-4 py-2 text-base rounded-full bg-[#1F2123] border-transparent text-neutral-300 hover:bg-neutral-800/80 hover:text-white cursor-pointer shadow-sm">{currentTranslations.nic}</Badge>
                         </div>
-                    </Link>
-                    <Link href="#" className="transition-transform duration-200 ease-in-out hover:scale-105">
+                    </button>
+                    <button onClick={() => setSearchQuery(currentTranslations.passport)} className="transition-transform duration-200 ease-in-out hover:scale-105">
                        <div className="animated-border-wrapper p-[1px] rounded-full">
                          <Badge variant="outline" className="px-4 py-2 text-base rounded-full bg-[#1F2123] border-transparent text-neutral-300 hover:bg-neutral-800/80 hover:text-white cursor-pointer shadow-sm">{currentTranslations.passport}</Badge>
                         </div>
-                    </Link>
-                    <Link href="#" className="transition-transform duration-200 ease-in-out hover:scale-105">
+                    </button>
+                    <button onClick={() => setSearchQuery(currentTranslations.drivingLicense)} className="transition-transform duration-200 ease-in-out hover:scale-105">
                         <div className="animated-border-wrapper p-[1px] rounded-full">
                             <Badge variant="outline" className="px-4 py-2 text-base rounded-full bg-[#1F2123] border-transparent text-neutral-300 hover:bg-neutral-800/80 hover:text-white cursor-pointer shadow-sm">{currentTranslations.drivingLicense}</Badge>
                         </div>
-                    </Link>
-                    <Link href="#" className="transition-transform duration-200 ease-in-out hover:scale-105">
+                    </button>
+                    <button onClick={() => setSearchQuery(currentTranslations.birthCertificate)} className="transition-transform duration-200 ease-in-out hover:scale-105">
                         <div className="animated-border-wrapper p-[1px] rounded-full">
                             <Badge variant="outline" className="px-4 py-2 text-base rounded-full bg-[#1F2123] border-transparent text-neutral-300 hover:bg-neutral-800/80 hover:text-white cursor-pointer shadow-sm">{currentTranslations.birthCertificate}</Badge>
                         </div>
-                    </Link>
-                    <Link href="#" className="transition-transform duration-200 ease-in-out hover:scale-105">
+                    </button>
+                    <button onClick={() => setSearchQuery(currentTranslations.policeClearance)} className="transition-transform duration-200 ease-in-out hover:scale-105">
                         <div className="animated-border-wrapper p-[1px] rounded-full">
                             <Badge variant="outline" className="px-4 py-2 text-base rounded-full bg-[#1F2123] border-transparent text-neutral-300 hover:bg-neutral-800/80 hover:text-white cursor-pointer shadow-sm">{currentTranslations.policeClearance}</Badge>
                         </div>
-                    </Link>
+                    </button>
                 </div>
             </div>
           </div>
