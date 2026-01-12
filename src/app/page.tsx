@@ -4,12 +4,14 @@ import { useRef, RefObject } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
-import { CreditCard, FileText, Banknote, ShieldCheck, Lock, FolderLock, Apple, TabletSmartphone, Smartphone, ArrowRight } from 'lucide-react';
+import { CreditCard, FileText, Banknote, ShieldCheck, Lock, FolderLock, Apple, TabletSmartphone, Smartphone, ArrowRight, Plus, Mic } from 'lucide-react';
 import Header from '@/components/common/header';
 import Footer from '@/components/common/footer';
 import Link from 'next/link';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+
 
 export default function Home() {
   const servicesRef = useRef<HTMLDivElement>(null);
@@ -60,6 +62,30 @@ export default function Home() {
               </div>
               <div>
                 {/* This div is intentionally left empty to allow the background image to show through on the right side */}
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        {/* AI Search Section */}
+        <section className="bg-black text-white py-16">
+          <div className="container mx-auto px-4 flex flex-col items-center text-center">
+            <h2 className="text-3xl font-bold mb-4">Hi there, what's on your mind?</h2>
+            <div className="w-full max-w-2xl mt-4">
+              <div className="animated-border-wrapper p-[2px] rounded-[28px]">
+                <div className="relative flex items-center w-full bg-[#1F2123] rounded-[26px]">
+                  <Button variant="ghost" size="icon" className="text-neutral-400 hover:text-white ml-2">
+                    <Plus />
+                  </Button>
+                  <Input 
+                    type="text"
+                    placeholder="Ask anything"
+                    className="flex-1 bg-transparent border-none text-white placeholder:text-neutral-400 focus-visible:ring-0 focus-visible:ring-offset-0 text-base h-auto py-5"
+                  />
+                  <Button variant="ghost" size="icon" className="text-neutral-400 hover:text-white mr-2">
+                    <Mic />
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
