@@ -119,6 +119,10 @@ export default function RegisterPage() {
                     <Label htmlFor="nic">NIC Number (Optional)</Label>
                     <Input id="nic" placeholder="e.g. 901234567V or 200012345678" />
                 </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="mobile-number">Mobile Number</Label>
+                  <Input id="mobile-number" type="tel" placeholder="07XXXXXXXX" required />
+                </div>
             </div>
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
