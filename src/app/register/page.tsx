@@ -60,9 +60,16 @@ export default function RegisterPage() {
                     <PopoverContent className="w-auto p-0">
                         <Calendar
                         mode="single"
+                        captionLayout="dropdown-nav"
+                        fromYear={new Date().getFullYear() - 100}
+                        toYear={new Date().getFullYear()}
                         selected={date}
                         onSelect={setDate}
+                        disabled={(date) =>
+                            date > new Date() || date < new Date("1900-01-01")
+                        }
                         initialFocus
+                        defaultMonth={new Date(new Date().setFullYear(new Date().getFullYear() - 20))}
                         />
                     </PopoverContent>
                     </Popover>
