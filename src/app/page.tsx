@@ -279,7 +279,7 @@ export default function Home() {
         <section ref={servicesRef} className="py-20 px-4 bg-white" id="services">
           <div className="container mx-auto">
             <h2 className="text-3xl font-bold text-center text-foreground mb-12">
-              Digital Services at Your Fingertips
+              Digital Service Guides at Your Fingertips
             </h2>
             <div className="grid md:grid-cols-3 gap-8 text-center">
               <Card className="border-0 shadow-none">
