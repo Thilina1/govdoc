@@ -6,12 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Image from 'next/image';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { CalendarIcon } from 'lucide-react';
-import { Calendar } from '@/components/ui/calendar';
-import { cn } from '@/lib/utils';
 import { useState } from 'react';
-import { format } from 'date-fns';
 
 
 export default function RegisterPage() {
@@ -44,35 +39,38 @@ export default function RegisterPage() {
                 </div>
                 <div className="grid gap-2">
                     <Label htmlFor="dob">Date of Birth</Label>
-                    <Popover>
-                    <PopoverTrigger asChild>
-                        <Button
-                        variant={"outline"}
-                        className={cn(
-                            "w-full justify-start text-left font-normal",
-                            !date && "text-muted-foreground"
-                        )}
-                        >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {date ? format(date, "PPP") : <span>Pick a date</span>}
-                        </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
-                        <Calendar
-                        mode="single"
-                        captionLayout="dropdown-nav"
-                        fromYear={new Date().getFullYear() - 100}
-                        toYear={new Date().getFullYear()}
-                        selected={date}
-                        onSelect={setDate}
-                        disabled={(date) =>
-                            date > new Date() || date < new Date("1900-01-01")
-                        }
-                        initialFocus
-                        defaultMonth={new Date(new Date().setFullYear(new Date().getFullYear() - 20))}
-                        />
-                    </PopoverContent>
-                    </Popover>
+                    <div className="grid grid-cols-3 gap-2">
+                        <Select>
+                            <SelectTrigger id="dob-day">
+                                <SelectValue placeholder="Day" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {Array.from({ length: 31 }, (_, i) => i + 1).map(day => (
+                                    <SelectItem key={day} value={String(day)}>{day}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                        <Select>
+                            <SelectTrigger id="dob-month">
+                                <SelectValue placeholder="Month" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {Array.from({ length: 12 }, (_, i) => i).map(month => (
+                                     <SelectItem key={month} value={String(month + 1)}>{new Date(0, month).toLocaleString('default', { month: 'long' })}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                        <Select>
+                            <SelectTrigger id="dob-year">
+                                <SelectValue placeholder="Year" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {Array.from({ length: 101 }, (_, i) => new Date().getFullYear() - i).map(year => (
+                                    <SelectItem key={year} value={String(year)}>{year}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="first-name">First name</Label>
