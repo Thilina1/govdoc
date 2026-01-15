@@ -17,6 +17,8 @@ const formSchema = z.object({
   title: z.string().min(1, { message: 'Title is required' }),
   firstName: z.string().min(1, { message: 'First name is required' }),
   lastName: z.string().min(1, { message: 'Last name is required' }),
+  email: z.string().email({ message: 'Invalid email address' }),
+  password: z.string().min(8, { message: 'Password must be at least 8 characters' }),
   dobDay: z.string().min(1, { message: 'Day is required' }),
   dobMonth: z.string().min(1, { message: 'Month is required' }),
   dobYear: z.string().min(1, { message: 'Year is required' }),
@@ -29,8 +31,6 @@ const formSchema = z.object({
   district: z.string().min(1, { message: 'District is required' }),
   nicNumber: z.string().optional(),
   mobileNumber: z.string().min(1, { message: 'Mobile number is required' }),
-  email: z.string().email({ message: 'Invalid email address' }),
-  password: z.string().min(8, { message: 'Password must be at least 8 characters' }),
 });
 
 export default function RegisterPage() {
@@ -42,6 +42,8 @@ export default function RegisterPage() {
       title: '',
       firstName: '',
       lastName: '',
+      email: '',
+      password: '',
       dobDay: '',
       dobMonth: '',
       dobYear: '',
@@ -54,8 +56,6 @@ export default function RegisterPage() {
       district: '',
       nicNumber: '',
       mobileNumber: '',
-      email: '',
-      password: '',
     },
   });
 
@@ -127,6 +127,32 @@ export default function RegisterPage() {
                     <FormItem>
                       <FormLabel>Last name</FormLabel>
                       <FormControl><Input placeholder="Doe" {...field} /></FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Email */}
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem className="md:col-span-2">
+                      <FormLabel>Email</FormLabel>
+                      <FormControl><Input type="email" placeholder="email@example.com" {...field} /></FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Password */}
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem className="md:col-span-2">
+                      <FormLabel>Password</FormLabel>
+                      <FormControl><Input type="password" {...field} /></FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -333,31 +359,6 @@ export default function RegisterPage() {
                   )}
                 />
 
-                {/* Email */}
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem className="md:col-span-2">
-                      <FormLabel>Email</FormLabel>
-                      <FormControl><Input type="email" placeholder="email@example.com" {...field} /></FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {/* Password */}
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem className="md:col-span-2">
-                      <FormLabel>Password</FormLabel>
-                      <FormControl><Input type="password" {...field} /></FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
               </div>
 
               <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-full">
