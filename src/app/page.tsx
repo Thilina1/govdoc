@@ -322,7 +322,9 @@ export default function Home() {
             <div className="grid md:grid-cols-3 gap-8 text-center">
               <Card className="bg-transparent border-0 shadow-none items-center">
                 <CardHeader className="items-center">
-                  <Lock className="w-16 h-16 text-primary mb-4" />
+                  <div className="bg-primary/10 p-4 rounded-full mb-4">
+                    <Lock className="w-16 h-16 text-primary" />
+                  </div>
                   <CardTitle className="text-xl">Step-by-Step Guides</CardTitle>
                   <CardDescription>
                     Clear, concise instructions to navigate complex application processes with ease.
@@ -331,7 +333,9 @@ export default function Home() {
               </Card>
               <Card className="bg-transparent border-0 shadow-none items-center">
                 <CardHeader className="items-center">
-                  <ShieldCheck className="w-16 h-16 text-primary mb-4" />
+                  <div className="bg-primary/10 p-4 rounded-full mb-4">
+                    <ShieldCheck className="w-16 h-16 text-primary" />
+                  </div>
                   <CardTitle>Document Checklists</CardTitle>
                   <CardDescription>
                     Never miss a document again with our comprehensive checklists for every service.
@@ -340,7 +344,9 @@ export default function Home() {
               </Card>
               <Card className="bg-transparent border-0 shadow-none items-center">
                 <CardHeader className="items-center">
-                  <FolderLock className="w-16 h-16 text-primary mb-4" />
+                  <div className="bg-primary/10 p-4 rounded-full mb-4">
+                    <FolderLock className="w-16 h-16 text-primary" />
+                  </div>
                   <CardTitle>e-Locker Ready</CardTitle>
                   <CardDescription>
                     Stay informed about the upcoming 2026 government digital document vault.
