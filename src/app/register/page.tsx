@@ -14,11 +14,11 @@ import { provinces, districtsByProvince } from '@/lib/geodata';
 import { Textarea } from '@/components/ui/textarea';
 
 const formSchema = z.object({
+  email: z.string().email({ message: 'Invalid email address' }),
+  password: z.string().min(8, { message: 'Password must be at least 8 characters' }),
   title: z.string().min(1, { message: 'Title is required' }),
   firstName: z.string().min(1, { message: 'First name is required' }),
   lastName: z.string().min(1, { message: 'Last name is required' }),
-  email: z.string().email({ message: 'Invalid email address' }),
-  password: z.string().min(8, { message: 'Password must be at least 8 characters' }),
   dobDay: z.string().min(1, { message: 'Day is required' }),
   dobMonth: z.string().min(1, { message: 'Month is required' }),
   dobYear: z.string().min(1, { message: 'Year is required' }),
@@ -39,11 +39,11 @@ export default function RegisterPage() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      email: '',
+      password: '',
       title: '',
       firstName: '',
       lastName: '',
-      email: '',
-      password: '',
       dobDay: '',
       dobMonth: '',
       dobYear: '',
@@ -82,6 +82,33 @@ export default function RegisterPage() {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                
+                {/* Email */}
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem className="md:col-span-2">
+                      <FormLabel>Email</FormLabel>
+                      <FormControl><Input type="email" placeholder="email@example.com" {...field} /></FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Password */}
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem className="md:col-span-2">
+                      <FormLabel>Password</FormLabel>
+                      <FormControl><Input type="password" {...field} /></FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
                 {/* Title */}
                 <FormField
                   control={form.control}
@@ -127,32 +154,6 @@ export default function RegisterPage() {
                     <FormItem>
                       <FormLabel>Last name</FormLabel>
                       <FormControl><Input placeholder="Doe" {...field} /></FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {/* Email */}
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem className="md:col-span-2">
-                      <FormLabel>Email</FormLabel>
-                      <FormControl><Input type="email" placeholder="email@example.com" {...field} /></FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {/* Password */}
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem className="md:col-span-2">
-                      <FormLabel>Password</FormLabel>
-                      <FormControl><Input type="password" {...field} /></FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
