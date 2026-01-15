@@ -71,8 +71,8 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background py-12">
-      <Card className="mx-auto max-w-3xl w-full shadow-lg rounded-xl border">
+    <div className="flex items-center justify-center bg-background py-12 px-4">
+      <Card className="mx-auto max-w-2xl w-full shadow-lg rounded-xl border">
         <CardHeader className="text-center space-y-4">
           <Image src="/logo.png" alt="GovDocs LK Logo" width={60} height={60} className="mx-auto" data-ai-hint="logo" />
           <CardTitle className="text-2xl text-foreground">Create an Account</CardTitle>
