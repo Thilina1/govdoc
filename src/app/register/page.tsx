@@ -5,12 +5,21 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Image from 'next/image';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { CalendarIcon } from 'lucide-react';
+import { Calendar } from '@/components/ui/calendar';
+import { cn } from '@/lib/utils';
+import { useState } from 'react';
+import { format } from 'date-fns';
 
 
 export default function RegisterPage() {
+    const [date, setDate] = useState<Date>();
+
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background">
-      <Card className="mx-auto max-w-sm w-full shadow-lg rounded-xl border">
+    <div className="flex items-center justify-center min-h-screen bg-background py-12">
+      <Card className="mx-auto max-w-2xl w-full shadow-lg rounded-xl border">
         <CardHeader className="text-center space-y-4">
           <Image src="/logo.png" alt="GovDocs LK Logo" width={60} height={60} className="mx-auto" data-ai-hint="logo" />
           <CardTitle className="text-2xl text-foreground">Create an Account</CardTitle>
@@ -19,8 +28,45 @@ export default function RegisterPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4">
-            <div className="grid grid-cols-2 gap-4">
+          <div className="grid gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+               <div className="grid gap-2">
+                    <Label htmlFor="gender">Title</Label>
+                    <Select>
+                        <SelectTrigger id="gender">
+                            <SelectValue placeholder="Select your title" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="mr">Mr.</SelectItem>
+                            <SelectItem value="ms">Ms.</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="grid gap-2">
+                    <Label htmlFor="dob">Date of Birth</Label>
+                    <Popover>
+                    <PopoverTrigger asChild>
+                        <Button
+                        variant={"outline"}
+                        className={cn(
+                            "w-full justify-start text-left font-normal",
+                            !date && "text-muted-foreground"
+                        )}
+                        >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {date ? format(date, "PPP") : <span>Pick a date</span>}
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                        <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={setDate}
+                        initialFocus
+                        />
+                    </PopoverContent>
+                    </Popover>
+              </div>
               <div className="grid gap-2">
                 <Label htmlFor="first-name">First name</Label>
                 <Input id="first-name" placeholder="John" required />
@@ -29,6 +75,45 @@ export default function RegisterPage() {
                 <Label htmlFor="last-name">Last name</Label>
                 <Input id="last-name" placeholder="Doe" required />
               </div>
+               <div className="grid gap-2">
+                    <Label htmlFor="province">Province</Label>
+                    <Select>
+                        <SelectTrigger id="province">
+                            <SelectValue placeholder="Select your province" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="western">Western</SelectItem>
+                            <SelectItem value="central">Central</SelectItem>
+                            <SelectItem value="southern">Southern</SelectItem>
+                            <SelectItem value="northern">Northern</SelectItem>
+                            <SelectItem value="eastern">Eastern</SelectItem>
+                            <SelectItem value="north-western">North Western</SelectItem>
+                            <SelectItem value="north-central">North Central</SelectItem>
+                            <SelectItem value="uva">Uva</SelectItem>
+                            <SelectItem value="sabaragamuwa">Sabaragamuwa</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="grid gap-2">
+                    <Label htmlFor="district">District</Label>
+                    <Select>
+                        <SelectTrigger id="district">
+                            <SelectValue placeholder="Select your district" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="colombo">Colombo</SelectItem>
+                            <SelectItem value="gampaha">Gampaha</SelectItem>
+                            <SelectItem value="kalutara">Kalutara</SelectItem>
+                            <SelectItem value="kandy">Kandy</SelectItem>
+                            <SelectItem value="matale">Matale</SelectItem>
+                             {/* Add other districts as needed */}
+                        </SelectContent>
+                    </Select>
+                </div>
+                 <div className="grid gap-2">
+                    <Label htmlFor="nic">NIC Number (Optional)</Label>
+                    <Input id="nic" placeholder="e.g. 901234567V or 200012345678" />
+                </div>
             </div>
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
