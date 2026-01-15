@@ -287,7 +287,7 @@ export default function Home() {
                   <CreditCard className="w-16 h-16 text-primary mb-4" />
                   <CardTitle className="text-xl">National ID (NIC)</CardTitle>
                   <CardDescription>
-                    Guides on the 2026 Digital ID, ICAO photo requirements, and application processes.
+                    Get clear guidance on the 2026 Digital ID, ICAO photo standards, and application steps.
                   </CardDescription>
                 </CardHeader>
               </Card>
@@ -296,7 +296,7 @@ export default function Home() {
                   <FileText className="w-16 h-16 text-primary mb-4" />
                   <CardTitle>Passport (K-35 A)</CardTitle>
                   <CardDescription>
-                    Information on the online passport application and biometric centers.
+                    Find information on the online passport process and find regional biometric centers near you.
                   </CardDescription>
                 </CardHeader>
               </Card>
@@ -305,7 +305,7 @@ export default function Home() {
                   <Banknote className="w-16 h-16 text-primary mb-4" />
                   <CardTitle>Banking Guides</CardTitle>
                   <CardDescription>
-                    Learn about digital account opening, personal loans, and Video KYC procedures.
+                    We provide easy-to-follow guides for digital accounts, personal loans, and Video KYC.
                   </CardDescription>
                 </CardHeader>
               </Card>
