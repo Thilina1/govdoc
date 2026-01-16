@@ -5,13 +5,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import Image from 'next/image';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useState } from 'react';
+import { useState, useActionState, useEffect, startTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { provinces, districtsByProvince } from '@/lib/geodata';
 import { Textarea } from '@/components/ui/textarea';
+import { registerUser } from '@/app/actions/auth';
+import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
@@ -35,7 +38,9 @@ const formSchema = z.object({
 
 export default function RegisterPage() {
   const [selectedProvince, setSelectedProvince] = useState('');
-  
+  const [state, formAction, isPending] = useActionState(registerUser, {});
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -59,15 +64,28 @@ export default function RegisterPage() {
     },
   });
 
+  // Redirect on success
+  useEffect(() => {
+    if (state.success) {
+      router.push('/login?registered=true');
+    }
+  }, [state.success, router]);
+
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Combine date fields
-    const dateOfBirth = new Date(`${values.dobYear}-${values.dobMonth}-${values.dobDay}`);
-    const submissionData = {
-      ...values,
-      date_of_birth: dateOfBirth.toISOString().split('T')[0], // Format as YYYY-MM-DD
-    };
-    // TODO: Connect to Supabase
-    console.log(submissionData);
+    const formData = new FormData();
+    // Append all basic fields
+    Object.entries(values).forEach(([key, value]) => {
+      if (value) formData.append(key, value);
+    });
+
+    // Construct date_of_birth
+    const dateOfBirth = `${values.dobYear}-${values.dobMonth}-${values.dobDay}`;
+    formData.append('dateOfBirth', dateOfBirth);
+
+    // Call server action
+    startTransition(() => {
+      formAction(formData);
+    });
   }
 
   return (
@@ -79,10 +97,16 @@ export default function RegisterPage() {
           <CardDescription>Join GovDocs LK to streamline your document processes.</CardDescription>
         </CardHeader>
         <CardContent>
+          {state.error && (
+            <div className="mb-6 p-4 text-sm text-red-800 rounded-lg bg-red-50 border border-red-200" role="alert">
+              <span className="font-medium">Error:</span> {state.error}
+            </div>
+          )}
+
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-                
+
                 {/* Email */}
                 <FormField
                   control={form.control}
@@ -162,63 +186,63 @@ export default function RegisterPage() {
                 {/* Date of Birth */}
                 <FormField
                   control={form.control}
-                  name="dobDay" // This is just for structure, validation is on individual fields
+                  name="dobDay"
                   render={() => (
                     <FormItem className="md:col-span-2">
-                       <FormLabel>Date of Birth</FormLabel>
-                       <div className="grid grid-cols-3 gap-2">
-                          <FormField
-                            control={form.control}
-                            name="dobDay"
-                            render={({ field }) => (
-                              <FormItem>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                    <FormControl><SelectTrigger><SelectValue placeholder="Day" /></SelectTrigger></FormControl>
-                                    <SelectContent>
-                                        {Array.from({ length: 31 }, (_, i) => i + 1).map(day => (
-                                            <SelectItem key={day} value={String(day)}>{day}</SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                          <FormField
-                            control={form.control}
-                            name="dobMonth"
-                            render={({ field }) => (
-                              <FormItem>
-                                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                    <FormControl><SelectTrigger><SelectValue placeholder="Month" /></SelectTrigger></FormControl>
-                                    <SelectContent>
-                                        {Array.from({ length: 12 }, (_, i) => i).map(month => (
-                                            <SelectItem key={month} value={String(month + 1)}>{new Date(0, month).toLocaleString('default', { month: 'long' })}</SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                  </Select>
-                                  <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                          <FormField
-                            control={form.control}
-                            name="dobYear"
-                            render={({ field }) => (
-                              <FormItem>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                    <FormControl><SelectTrigger><SelectValue placeholder="Year" /></SelectTrigger></FormControl>
-                                    <SelectContent>
-                                        {Array.from({ length: 101 }, (_, i) => new Date().getFullYear() - i).map(year => (
-                                            <SelectItem key={year} value={String(year)}>{year}</SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                       </div>
+                      <FormLabel>Date of Birth</FormLabel>
+                      <div className="grid grid-cols-3 gap-2">
+                        <FormField
+                          control={form.control}
+                          name="dobDay"
+                          render={({ field }) => (
+                            <FormItem>
+                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl><SelectTrigger><SelectValue placeholder="Day" /></SelectTrigger></FormControl>
+                                <SelectContent>
+                                  {Array.from({ length: 31 }, (_, i) => i + 1).map(day => (
+                                    <SelectItem key={day} value={String(day)}>{day}</SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="dobMonth"
+                          render={({ field }) => (
+                            <FormItem>
+                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl><SelectTrigger><SelectValue placeholder="Month" /></SelectTrigger></FormControl>
+                                <SelectContent>
+                                  {Array.from({ length: 12 }, (_, i) => i).map(month => (
+                                    <SelectItem key={month} value={String(month + 1)}>{new Date(0, month).toLocaleString('default', { month: 'long' })}</SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="dobYear"
+                          render={({ field }) => (
+                            <FormItem>
+                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl><SelectTrigger><SelectValue placeholder="Year" /></SelectTrigger></FormControl>
+                                <SelectContent>
+                                  {Array.from({ length: 101 }, (_, i) => new Date().getFullYear() - i).map(year => (
+                                    <SelectItem key={year} value={String(year)}>{year}</SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
                     </FormItem>
                   )}
                 />
@@ -299,17 +323,17 @@ export default function RegisterPage() {
                 />
 
                 {/* Province */}
-                 <FormField
+                <FormField
                   control={form.control}
                   name="province"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Province</FormLabel>
                       <Select onValueChange={(value) => { field.onChange(value); setSelectedProvince(value); form.setValue('district', ''); }} defaultValue={field.value}>
-                          <FormControl><SelectTrigger><SelectValue placeholder="Select your province" /></SelectTrigger></FormControl>
-                          <SelectContent>
-                              {provinces.map(p => <SelectItem key={p.value} value={p.value}>{p.label}</SelectItem>)}
-                          </SelectContent>
+                        <FormControl><SelectTrigger><SelectValue placeholder="Select your province" /></SelectTrigger></FormControl>
+                        <SelectContent>
+                          {provinces.map(p => <SelectItem key={p.value} value={p.value}>{p.label}</SelectItem>)}
+                        </SelectContent>
                       </Select>
                       <FormMessage />
                     </FormItem>
@@ -324,18 +348,18 @@ export default function RegisterPage() {
                     <FormItem>
                       <FormLabel>District</FormLabel>
                       <Select onValueChange={field.onChange} value={field.value} disabled={!selectedProvince}>
-                          <FormControl><SelectTrigger><SelectValue placeholder="Select your district" /></SelectTrigger></FormControl>
-                          <SelectContent>
-                              {(districtsByProvince[selectedProvince] || []).map(d => <SelectItem key={d.value} value={d.value}>{d.label}</SelectItem>)}
-                          </SelectContent>
+                        <FormControl><SelectTrigger><SelectValue placeholder="Select your district" /></SelectTrigger></FormControl>
+                        <SelectContent>
+                          {(districtsByProvince[selectedProvince] || []).map(d => <SelectItem key={d.value} value={d.value}>{d.label}</SelectItem>)}
+                        </SelectContent>
                       </Select>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
 
-                 {/* NIC */}
-                 <FormField
+                {/* NIC */}
+                <FormField
                   control={form.control}
                   name="nicNumber"
                   render={({ field }) => (
@@ -362,8 +386,15 @@ export default function RegisterPage() {
 
               </div>
 
-              <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-full">
-                Create Account
+              <Button type="submit" disabled={isPending} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-full">
+                {isPending ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Creating Account...
+                  </>
+                ) : (
+                  'Create Account'
+                )}
               </Button>
             </form>
           </Form>
