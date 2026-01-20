@@ -1,0 +1,232 @@
+'use client';
+
+import { useState, useEffect, useActionState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Loader2, Plus, RefreshCw } from 'lucide-react';
+import { createCategory, getCategories, CategoryState } from '@/app/actions/admin';
+import { useToast } from '@/hooks/use-toast';
+
+type Category = {
+    id: string;
+    name: string;
+    parent_id: string | null;
+};
+
+export default function CategoryManagerPage() {
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const { toast } = useToast();
+
+    // parentSelection tracks the path of selected category IDs.
+    const [parentSelection, setParentSelection] = useState<string[]>([]);
+    const finalParentId = parentSelection.length > 0 ? parentSelection[parentSelection.length - 1] : 'root';
+
+    const initialState: CategoryState = { error: undefined, success: undefined, message: undefined };
+    const [state, formAction, isPending] = useActionState(createCategory, initialState);
+
+    const fetchCategories = async () => {
+        setIsLoading(true);
+        try {
+            const data = await getCategories();
+            setCategories(data);
+        } catch (error) {
+            console.error('Failed to load categories', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchCategories();
+    }, []);
+
+    useEffect(() => {
+        if (state.success) {
+            toast({
+                title: "Success",
+                description: state.message,
+            });
+            fetchCategories();
+            fetchCategories();
+            // setParentSelection([]); // selection is kept logic
+        } else if (state.error) {
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: state.error,
+            });
+        }
+    }, [state, toast]);
+
+    const handleLevelChange = (level: number, value: string) => {
+        const newSelection = parentSelection.slice(0, level);
+        if (value && value !== 'root_placeholder') {
+            newSelection.push(value);
+        }
+        setParentSelection(newSelection);
+    };
+
+    return (
+        <div className="container mx-auto py-10 px-4">
+            <div className="flex justify-between items-center mb-8">
+                <h1 className="text-3xl font-bold">Category Manager</h1>
+                <Button variant="outline" onClick={fetchCategories} disabled={isLoading}>
+                    <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+                    Refresh
+                </Button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Add New Category</CardTitle>
+                        <CardDescription>Select nested parent to create sub-category.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <form action={formAction} className="space-y-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="name">Category Name</Label>
+                                <Input id="name" name="name" placeholder="e.g. Personal, Housing" required />
+                            </div>
+
+                            <div className="p-4 bg-muted/30 rounded-lg space-y-4 border">
+                                <Label className="text-base font-semibold">Parent Hierarchy</Label>
+                                <CardDescription className="mb-2">
+                                    Target Parent: <span className="font-bold text-foreground">{finalParentId === 'root' ? 'Top Level (Root)' : categories.find(c => String(c.id) === String(finalParentId))?.name}</span>
+                                </CardDescription>
+
+                                {/* Recursive Cascading Dropdowns */}
+                                <CategoryLevel
+                                    categories={categories}
+                                    parentId={null}
+                                    level={0}
+                                    selection={parentSelection}
+                                    onSelect={handleLevelChange}
+                                />
+
+
+
+                                <input type="hidden" name="parentId" value={finalParentId} />
+                            </div>
+
+                            <Button type="submit" disabled={isPending} className="w-full">
+                                {isPending ? (
+                                    <>
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        Creating...
+                                    </>
+                                ) : (
+                                    <>
+                                        <Plus className="mr-2 h-4 w-4" /> Create Category
+                                    </>
+                                )}
+                            </Button>
+                        </form>
+                    </CardContent>
+                </Card>
+
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Category Tree</CardTitle>
+                        <CardDescription>Current structure overview.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        {isLoading ? (
+                            <div className="flex justify-center p-8"><Loader2 className="h-8 w-8 animate-spin" /></div>
+                        ) : (
+                            <div className="max-h-[500px] overflow-y-auto pr-2">
+                                <CategoryTree data={categories} parentId={null} />
+                            </div>
+                        )}
+                    </CardContent>
+                </Card>
+            </div>
+        </div>
+    );
+}
+
+// Recursive Component for Dropdowns
+function CategoryLevel({
+    categories,
+    parentId,
+    level,
+    selection,
+    onSelect
+}: {
+    categories: Category[],
+    parentId: string | null,
+    level: number,
+    selection: string[],
+    onSelect: (l: number, v: string) => void
+}) {
+    // 1. Get children for this level (Use String conversion to handle number/string ID mismatch logic)
+    const children = categories.filter(c => parentId === null ? (c.parent_id === null || c.parent_id === 'root') : String(c.parent_id) === String(parentId));
+
+    // 2. Base case: If no children and we are not at root, show empty state (Disabled Dropdown)
+    if (children.length === 0 && parentId !== null) {
+        return (
+            <div className={`space-y-2 ${level > 0 ? 'ml-4 border-l pl-4 mt-2' : ''}`}>
+                <Label>Sub-categories</Label>
+                <Select disabled>
+                    <SelectTrigger>
+                        <span className="text-muted-foreground">No sub-categories defined</span>
+                    </SelectTrigger>
+                </Select>
+            </div>
+        );
+    }
+
+    // 3. Determine current selected value for this level from the selection array
+    const currentValue = selection[level] || undefined;
+
+    return (
+        <div className={`space-y-2 ${level > 0 ? 'ml-4 border-l pl-4 mt-2' : ''}`}>
+            <Label>{level === 0 ? 'Main Category' : `Sub-categories`}</Label>
+            <Select
+                value={currentValue}
+                onValueChange={(val) => onSelect(level, val)}
+            >
+                <SelectTrigger>
+                    <SelectValue placeholder={`Select ${level === 0 ? 'Main' : 'Sub'} Category`} />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="root_placeholder">-- Select Category --</SelectItem>
+                    {children.map(cat => (
+                        <SelectItem key={cat.id} value={String(cat.id)}>{cat.name}</SelectItem>
+                    ))}
+                </SelectContent>
+            </Select>
+
+            {/* 4. Recursion: If a value is selected, try to render the NEXT level (children of selection) */}
+            {currentValue && (
+                <CategoryLevel
+                    key={currentValue} // Force re-render when parent changes
+                    categories={categories}
+                    parentId={currentValue}
+                    level={level + 1}
+                    selection={selection}
+                    onSelect={onSelect}
+                />
+            )}
+        </div>
+    );
+}
+
+function CategoryTree({ data, parentId }: { data: Category[], parentId: string | null }) {
+    const children = data.filter(c => c.parent_id === parentId);
+    if (children.length === 0) return null;
+    return (
+        <ul className={`${parentId ? 'pl-4 border-l ml-2' : 'space-y-1'}`}>
+            {children.map(child => (
+                <li key={child.id} className="py-1">
+                    <span className="font-medium text-sm block mb-1">{child.name}</span>
+                    <CategoryTree data={data} parentId={child.id} />
+                </li>
+            ))}
+        </ul>
+    );
+}
