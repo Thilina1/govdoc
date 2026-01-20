@@ -188,7 +188,7 @@ export default function DashboardClient({ user }: { user: UserProfile }) {
                 {/* Hero Section */}
                 <section className="relative text-white bg-red-600 -mt-20">
                     <Image
-                        src="/Hero_landing_desktop.webp"
+                        src="/Hero_landing_desktop.png"
                         alt="Hero background"
                         fill
                         className="object-cover absolute inset-0 z-0"
