@@ -5,7 +5,7 @@ import { useRef, RefObject, useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
-import { CreditCard, FileText, Banknote, ShieldCheck, Lock, FolderLock, Apple, TabletSmartphone, Smartphone, ArrowRight, Plus, Mic, ChevronDown } from 'lucide-react';
+import { CreditCard, FileText, Banknote, ShieldCheck, Lock, FolderLock, Apple, TabletSmartphone, Smartphone, ArrowRight, Plus, Mic, ChevronDown, Files, GraduationCap, BookOpen, Book, ClipboardList, Library, Calendar, Briefcase, Trophy } from 'lucide-react';
 import DashboardHeader from '@/components/common/dashboard-header';
 import Footer from '@/components/common/footer';
 import Link from 'next/link';
@@ -27,6 +27,8 @@ interface UserProfile {
     lastName: string;
     email: string;
 }
+
+// interface UserProfile { ... } (already defined)
 
 export default function DashboardClient({ user }: { user: UserProfile }) {
     const servicesRef = useRef<HTMLDivElement>(null);
@@ -302,54 +304,11 @@ export default function DashboardClient({ user }: { user: UserProfile }) {
                     </div>
                 </section>
 
-                {/* Promo Section */}
-                <section className="bg-background text-foreground py-20">
-                    <div className="container mx-auto px-4 text-center">
-                        <h2 className="text-3xl md:text-4xl font-bold max-w-4xl mx-auto">
-                            Guidance to access over 2,700 services by over 800 government agencies and businesses at your fingertips
-                        </h2>
-                    </div>
-                </section>
 
-                {/* Services Section */}
-                <section ref={servicesRef} className="py-20 px-4 bg-white" id="services">
-                    <div className="container mx-auto">
-                        <h2 className="text-3xl font-bold text-center text-foreground mb-12">
-                            Digital Service Guides at Your Fingertips
-                        </h2>
-                        <div className="grid md:grid-cols-3 gap-8 text-center">
-                            <Card className="border-0 shadow-none">
-                                <CardHeader className="items-center">
-                                    <CreditCard className="w-16 h-16 text-primary mb-4" />
-                                    <CardTitle className="text-xl">National ID (NIC)</CardTitle>
-                                    <CardDescription>
-                                        Get clear guidance on the 2026 Digital ID, ICAO photo standards, and application steps.
-                                    </CardDescription>
-                                </CardHeader>
-                            </Card>
-                            <Card className="border-0 shadow-none">
-                                <CardHeader className="items-center">
-                                    <FileText className="w-16 h-16 text-primary mb-4" />
-                                    <CardTitle>Passport (K-35 A)</CardTitle>
-                                    <CardDescription>
-                                        Find information on the online passport process and find regional biometric centers near you.
-                                    </CardDescription>
-                                </CardHeader>
-                            </Card>
-                            <Card className="border-0 shadow-none">
-                                <CardHeader className="items-center">
-                                    <Banknote className="w-16 h-16 text-primary mb-4" />
-                                    <CardTitle>Banking Guides</CardTitle>
-                                    <CardDescription>
-                                        We provide easy-to-follow guides for digital accounts, personal loans, and Video KYC.
-                                    </CardDescription>
-                                </CardHeader>
-                            </Card>
-                        </div>
-                    </div>
-                </section>
 
-                {/* Features Section */}
+
+
+                {/* Features Section - Moved here */}
                 <section className="py-20 px-4 bg-white" id="features">
                     <div className="container mx-auto">
                         <h2 className="text-3xl font-bold text-center text-foreground mb-12">
@@ -392,6 +351,40 @@ export default function DashboardClient({ user }: { user: UserProfile }) {
                         </div>
                     </div>
                 </section>
+
+                {/* Resources Grid Section */}
+                <section className="bg-gray-50 py-12 border-b">
+                    <div className="container mx-auto px-4">
+                        <h2 className="text-2xl font-bold text-gray-800 mb-8 text-center">Government Resources</h2>
+                        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                            {[
+                                { title: 'Gazette', slug: 'gazette', bg: 'bg-blue-100', icon: FileText, color: 'text-blue-600', description: 'Government Gazettes' },
+                                { title: 'Document', slug: 'document', bg: 'bg-indigo-100', icon: Files, color: 'text-indigo-600', description: 'Government Documents' },
+                                { title: 'Past Papers', slug: 'past-papers', bg: 'bg-purple-100', icon: GraduationCap, color: 'text-purple-600', description: 'Exam Past Papers' },
+                                { title: 'Model Papers', slug: 'model-papers', bg: 'bg-pink-100', icon: BookOpen, color: 'text-pink-600', description: 'Exam Model Papers' },
+                                { title: 'Syllabus', slug: 'syllabus', bg: 'bg-rose-100', icon: Book, color: 'text-rose-600', description: 'School Syllabus' },
+                                { title: 'Teacher Guides', slug: 'teacher-guides', bg: 'bg-orange-100', icon: Book, color: 'text-orange-600', description: 'Teacher Guides' },
+                                { title: 'Term Test Papers', slug: 'term-test-papers', bg: 'bg-amber-100', icon: ClipboardList, color: 'text-amber-600', description: 'Term Test Papers' },
+                                { title: 'Text Books', slug: 'text-books', bg: 'bg-yellow-100', icon: Library, color: 'text-yellow-600', description: 'School Text Books' },
+                                { title: 'Exam Calendars', slug: 'exam-calendars', bg: 'bg-lime-100', icon: Calendar, color: 'text-lime-600', description: 'Exam Calendars' },
+                                { title: 'Jobs', slug: 'jobs', bg: 'bg-green-100', icon: Briefcase, color: 'text-green-600', description: 'Government Jobs' },
+                                { title: 'Results', slug: 'results', bg: 'bg-emerald-100', icon: Trophy, color: 'text-emerald-600', description: 'Lottery Results' },
+                            ].map((item, index) => (
+                                <Link href={`/resources/${item.slug}`} key={index} className="block group">
+                                    <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all h-full text-center flex flex-col items-center">
+                                        <div className={`w-12 h-12 rounded-full ${item.bg} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform`}>
+                                            <item.icon className={`w-6 h-6 ${item.color}`} />
+                                        </div>
+                                        <h3 className="font-semibold text-gray-900 text-sm mb-1">{item.title}</h3>
+                                        <p className="text-xs text-gray-500 line-clamp-2">{item.description}</p>
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+
+
 
 
 

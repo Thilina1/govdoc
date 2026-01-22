@@ -1,6 +1,7 @@
 'use server';
 
 import { createAdminClient } from '@/lib/supabase/admin';
+import { getAdminProfile } from '@/lib/auth-service';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
@@ -202,6 +203,7 @@ export async function createService(prevState: ServiceState, formData: FormData)
     const categoryId = formData.get('categoryId') as string;
     const description = formData.get('description') as string;
     const customDetailsJson = formData.get('customDetails') as string;
+    const fileUrl = formData.get('fileUrl') as string;
 
     if (!name || !categoryId) {
         return { error: 'Service name and category are required' };
@@ -226,6 +228,7 @@ export async function createService(prevState: ServiceState, formData: FormData)
             name,
             description,
             custom_details: customDetails,
+            file_url: fileUrl || null,
         })
         .select()
         .single();
@@ -263,4 +266,63 @@ export async function getUsers() {
         return [];
     }
     return data || [];
+}
+
+export async function getCategoryByName(name: string) {
+    const supabase = createAdminClient();
+    const { data, error } = await supabase
+        .from('categories')
+        .select('id, name, parent_id')
+        .ilike('name', name)
+        .single(); // ilike matches case-insensitive
+
+    if (error) {
+        // Only log if it's not a 'no rows' error if you want to be cleaner, but standard log is fine
+        if (error.code !== 'PGRST116') { // PGRST116 is 0 rows
+            console.error(`Error fetching category by name (${name}):`, error);
+        }
+        return null;
+    }
+
+    return data;
+}
+
+export async function uploadResourceFile(formData: FormData) {
+    const file = formData.get('file') as File;
+    const categoryName = formData.get('categoryName') as string || 'resource';
+
+    if (!file) {
+        return { error: 'No file provided' };
+    }
+
+    // Auth check
+    const admin = await getAdminProfile();
+    if (!admin) {
+        return { error: 'Unauthorized' };
+    }
+
+    const supabase = createAdminClient();
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${categoryName.replace(/\s+/g, '_')}_${Date.now()}.${fileExt}`;
+    const filePath = `${fileName}`;
+
+    try {
+        const { error: uploadError } = await supabase.storage
+            .from('documents')
+            .upload(filePath, file);
+
+        if (uploadError) {
+            console.error('Upload error:', uploadError);
+            return { error: uploadError.message };
+        }
+
+        const { data: { publicUrl } } = supabase.storage
+            .from('documents')
+            .getPublicUrl(filePath);
+
+        return { success: true, publicUrl };
+    } catch (error: any) {
+        console.error('Unexpected upload error:', error);
+        return { error: error.message };
+    }
 }

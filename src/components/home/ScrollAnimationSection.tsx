@@ -85,8 +85,9 @@ export function ScrollAnimationSection() {
                         style={{ opacity: textOpacity, y: textY }}
                         className="absolute left-4 md:left-10 lg:left-24 top-1/3 -translate-y-1/2 z-30 max-w-xs md:max-w-md"
                     >
-                        <h2 className="text-4xl md:text-5xl lg:text-5xl font-bold leading-tight">
-                            <span className="block text-black mb-4">Easily accessed with your </span>
+                        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight">
+                            <span className="block text-black">Easily accessed </span>
+                            <span className="block text-black mb-3">with your</span>
                             <span className="block text-red-600">trusted digital identity</span>
                         </h2>
                     </motion.div>
@@ -97,15 +98,15 @@ export function ScrollAnimationSection() {
                         className="absolute inset-x-0 top-1/2 -translate-y-1/2 z-30 container mx-auto px-4 flex justify-between items-center pointer-events-none"
                     >
                         {/* Left Card */}
-                        <div className="bg-white/90 backdrop-blur-sm p-6 rounded-2xl shadow-xl max-w-xs md:max-w-sm ml-4 pointer-events-auto">
-                            <h3 className="text-xl font-bold text-gray-900 mb-2">Secure & Verified</h3>
-                            <p className="text-gray-600">Your data is protected with state-of-the-art encryption and biometric verification.</p>
+                        <div className="bg-white/90 backdrop-blur-sm p-5 rounded-2xl shadow-xl max-w-xs md:max-w-sm ml-4 pointer-events-auto">
+                            <h3 className="text-lg font-bold text-gray-900 mb-1">Secure & Verified</h3>
+                            <p className="text-sm text-gray-600">Your data is protected with state-of-the-art encryption and biometric verification.</p>
                         </div>
 
                         {/* Right Card */}
-                        <div className="bg-white/90 backdrop-blur-sm p-6 rounded-2xl shadow-xl max-w-xs md:max-w-sm mr-4 pointer-events-auto text-right">
-                            <h3 className="text-xl font-bold text-gray-900 mb-2">One-Stop Access</h3>
-                            <p className="text-gray-600">Connect to over 800 government and private sector services seamlessly.</p>
+                        <div className="bg-white/90 backdrop-blur-sm p-5 rounded-2xl shadow-xl max-w-xs md:max-w-sm mr-4 pointer-events-auto text-right">
+                            <h3 className="text-lg font-bold text-gray-900 mb-1">One-Stop Access</h3>
+                            <p className="text-sm text-gray-600">Connect to over 800 government and private sector services seamlessly.</p>
                         </div>
                     </motion.div>
 

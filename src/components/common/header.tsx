@@ -9,12 +9,8 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/co
 import { cn } from '@/lib/utils';
 
 export default function Header({
-  scrollTo,
-  servicesRef,
   variant = 'transparent'
 }: {
-  scrollTo?: (ref: any) => void;
-  servicesRef?: RefObject<HTMLDivElement | null>;
   variant?: 'transparent' | 'opaque';
 }) {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -37,22 +33,25 @@ export default function Header({
         <div className="flex items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             {/* Logo removed */}
-            <span className={cn("font-bold text-xl", showSolid ? 'text-foreground' : 'text-white')}>GovDocs LK</span>
+            <span className={cn("font-bold text-xl border-l-4 pl-4", showSolid ? 'text-foreground border-primary' : 'text-white border-white')}>GovDocs LK</span>
           </Link>
         </div>
 
         <nav className="hidden md:flex items-center space-x-6 text-sm font-medium ml-auto">
-          {scrollTo && servicesRef ? (
-            <button onClick={() => scrollTo(servicesRef)} className={cn("transition-colors", showSolid ? "text-foreground/80 hover:text-primary" : "text-white/80 hover:text-white")}>
-              Services
-            </button>
-          ) : (
-            <Link href="/#services" className={cn("transition-colors", showSolid ? "text-foreground/80 hover:text-primary" : "text-white/80 hover:text-white")}>
-              Services
-            </Link>
-          )}
-          <Link href="#features" className={cn("transition-colors", showSolid ? "text-foreground/80 hover:text-primary" : "text-white/80 hover:text-white")}>
+          <Link href="/" className={cn("transition-colors", showSolid ? "text-foreground/80 hover:text-primary" : "text-white/80 hover:text-white")}>
+            Home
+          </Link>
+          <Link href="/services" className={cn("transition-colors", showSolid ? "text-foreground/80 hover:text-primary" : "text-white/80 hover:text-white")}>
+            Services
+          </Link>
+          <Link href="/#features" className={cn("transition-colors", showSolid ? "text-foreground/80 hover:text-primary" : "text-white/80 hover:text-white")}>
             Features
+          </Link>
+          <Link href="/#blog" className={cn("transition-colors", showSolid ? "text-foreground/80 hover:text-primary" : "text-white/80 hover:text-white")}>
+            News
+          </Link>
+          <Link href="/#whats-new" className={cn("transition-colors", showSolid ? "text-foreground/80 hover:text-primary" : "text-white/80 hover:text-white")}>
+            What's New
           </Link>
           <LanguageSwitcher />
           <Button asChild className={cn(showSolid ? 'bg-primary hover:bg-primary/90 text-primary-foreground' : 'bg-white/20 hover:bg-white/30 text-white')} >
@@ -78,16 +77,12 @@ export default function Header({
               </SheetHeader>
               <nav className="flex flex-col gap-4 mt-8">
                 <Link href="/" className="font-bold text-lg">Home</Link>
-                {scrollTo && servicesRef ? (
-                  <button onClick={() => scrollTo(servicesRef)} className="font-bold text-lg text-left">
-                    Services
-                  </button>
-                ) : (
-                  <Link href="/#services" className="font-bold text-lg">
-                    Services
-                  </Link>
-                )}
-                <Link href="#features" className="font-bold text-lg">Features</Link>
+                <Link href="/services" className="font-bold text-lg">
+                  Services
+                </Link>
+                <Link href="/#features" className="font-bold text-lg">Features</Link>
+                <Link href="/#blog" className="font-bold text-lg">News</Link>
+                <Link href="/#whats-new" className="font-bold text-lg">What's New</Link>
                 <div className='flex flex-col gap-2 pt-4'>
                   <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground">
                     <Link href="/login">Login</Link>

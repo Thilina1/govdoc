@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Loader2, Plus, Trash2, Upload, Save } from 'lucide-react';
 import { createService, getAllCategories, ServiceState } from '@/app/actions/admin';
+import { createBrowserClient } from '@supabase/ssr'; // Ensure you have this or use standard supabase-js if preferred, assuming ssr package is installed based on package.json
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { AdminHeader } from '@/components/admin/AdminHeader';
@@ -34,8 +35,56 @@ export default function CreateServiceForm({ admin }: { admin: AdminProfile }) {
     const [categories, setCategories] = useState<Category[]>([]);
     const [customFields, setCustomFields] = useState<CustomField[]>([{ key: '', value: '' }]);
     const [images, setImages] = useState<{ file: File; label: string }[]>([]);
+    const [uploading, setUploading] = useState(false);
+    const [fileUrl, setFileUrl] = useState('');
     const { toast } = useToast();
     const router = useRouter();
+
+    // Initialize Supabase Client for client-side uploads
+    const supabase = createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY!
+    );
+
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!e.target.files || e.target.files.length === 0) return;
+
+        const file = e.target.files[0];
+        setUploading(true);
+
+        try {
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${Math.random().toString(36).substring(2)}_${Date.now()}.${fileExt}`;
+            const filePath = `${fileName}`;
+
+            const { error: uploadError } = await supabase.storage
+                .from('documents')
+                .upload(filePath, file);
+
+            if (uploadError) {
+                throw uploadError;
+            }
+
+            const { data: { publicUrl } } = supabase.storage
+                .from('documents')
+                .getPublicUrl(filePath);
+
+            setFileUrl(publicUrl);
+            toast({
+                title: "File uploaded",
+                description: "Document ready to be saved with the service.",
+            });
+        } catch (error: any) {
+            console.error('Upload error:', error);
+            toast({
+                variant: "destructive",
+                title: "Upload failed",
+                description: error.message || "Failed to upload file",
+            });
+        } finally {
+            setUploading(false);
+        }
+    };
 
     // Cascading Category Selection State
     const [parentSelection, setParentSelection] = useState<string[]>([]);
@@ -248,6 +297,39 @@ export default function CreateServiceForm({ admin }: { admin: AdminProfile }) {
                                     )}
                                     {/* Note: Image upload logic is separated as per request, actual file upload handling needs Supabase Storage integration */}
                                     {images.length > 0 && <p className="text-xs text-yellow-600 mt-2">Note: Image file upload integration requires storage bucket configuration.</p>}
+                                </CardContent>
+                            </Card>
+
+                            {/* Resource Document Upload */}
+                            <Card className="border-blue-200 bg-blue-50/20">
+                                <CardHeader>
+                                    <CardTitle className="text-blue-800">Resource Document (PDF)</CardTitle>
+                                    <CardDescription>Upload the main document (Gazette, Past Paper, etc.) for this service.</CardDescription>
+                                </CardHeader>
+                                <CardContent className="space-y-4">
+                                    <div className="space-y-4">
+                                        <div className="flex items-center gap-4">
+                                            <Input
+                                                id="file-upload"
+                                                type="file"
+                                                accept=".pdf,.doc,.docx"
+                                                onChange={handleFileUpload}
+                                                disabled={uploading}
+                                                className="cursor-pointer file:cursor-pointer file:text-blue-600 file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:rounded-full file:mr-4 file:font-semibold hover:file:bg-blue-100 transition-all"
+                                            />
+                                            {uploading && <Loader2 className="h-4 w-4 animate-spin text-blue-600" />}
+                                        </div>
+
+                                        {fileUrl && (
+                                            <div className="p-3 bg-green-50 text-green-700 border border-green-200 rounded-md flex items-center gap-2 text-sm">
+                                                <span className="font-semibold">✓ Ready to save:</span>
+                                                <a href={fileUrl} target="_blank" rel="noopener noreferrer" className="underline truncate max-w-[300px] block">
+                                                    Document Uploaded
+                                                </a>
+                                            </div>
+                                        )}
+                                        <input type="hidden" name="fileUrl" value={fileUrl} />
+                                    </div>
                                 </CardContent>
                             </Card>
 

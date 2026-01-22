@@ -3,7 +3,7 @@
 import { useState, useEffect, useTransition } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { getCategories, getServices, getCategoryPath } from '@/app/actions/admin';
+import { getResourceCategories, getResourcesByCategory, getCategoryAncestors } from '@/app/actions/resources';
 import { ArrowLeft, Loader2, Plus } from 'lucide-react';
 import Link from 'next/link';
 import { AdminSearch } from './AdminSearchInput';
@@ -19,9 +19,10 @@ type Category = {
 
 type Service = {
     id: string;
-    name: string;
+    title: string;
     category_id: string;
     description?: string;
+    slug?: string;
 };
 
 export default function Explorer({ admin }: { admin: AdminProfile }) {
@@ -41,9 +42,9 @@ export default function Explorer({ admin }: { admin: AdminProfile }) {
             setLoading(true);
             try {
                 const [cats, servs, path] = await Promise.all([
-                    getCategories(currentId),
-                    getServices(currentId),
-                    currentId ? getCategoryPath(currentId) : []
+                    getResourceCategories(currentId),
+                    getResourcesByCategory(currentId || ''),
+                    currentId ? getCategoryAncestors(currentId) : []
                 ]);
                 setCategories(cats);
                 setServices(servs);
@@ -73,11 +74,24 @@ export default function Explorer({ admin }: { admin: AdminProfile }) {
 
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                 <AdminSearch />
-                <Button asChild size="sm">
-                    <Link href={`/admin/categories/new${currentId ? `?parentId=${currentId}` : ''}`}>
-                        <Plus className="mr-2 h-4 w-4" /> Add Item
-                    </Link>
-                </Button>
+                <div className="flex gap-2">
+                    <Button asChild size="sm" variant="outline">
+                        {/* 
+                            For now, linking to a generic 'resource' type. 
+                            If currentId exists, we can pass it as categoryId.
+                            The [type] param in /admin/resources/[type]/new is required.
+                            We'll use 'general' or derive it from the parent if possible, but 'upload' is safe.
+                        */}
+                        <Link href={`/admin/resources/upload/new${currentId ? `?categoryId=${currentId}` : ''}`}>
+                            <FileText className="mr-2 h-4 w-4" /> Add Resource
+                        </Link>
+                    </Button>
+                    <Button asChild size="sm">
+                        <Link href={`/admin/categories/new${currentId ? `?parentId=${currentId}` : ''}`}>
+                            <Plus className="mr-2 h-4 w-4" /> Add Category
+                        </Link>
+                    </Button>
+                </div>
             </div>
 
             {loading ? (
@@ -114,7 +128,7 @@ export default function Explorer({ admin }: { admin: AdminProfile }) {
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                 <div className="flex items-center gap-2">
                                     <FileText className="h-4 w-4 text-green-500" />
-                                    <CardTitle className="text-sm font-medium">{service.name}</CardTitle>
+                                    <CardTitle className="text-sm font-medium">{service.title}</CardTitle>
                                 </div>
                             </CardHeader>
                             <CardContent>

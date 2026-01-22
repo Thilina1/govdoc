@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { LayoutDashboard, ListTree, Settings, Shield, Users } from 'lucide-react';
+import { LayoutDashboard, ListTree, Settings, Shield, Users, Files } from 'lucide-react';
 
 export function AdminSidebar() {
     const pathname = usePathname();
@@ -15,6 +15,12 @@ export function AdminSidebar() {
             label: 'Dashboard',
             icon: LayoutDashboard,
             exact: true
+        },
+        {
+            href: '/admin/resources',
+            label: 'Resources',
+            icon: Files,
+            exact: false
         },
         {
             href: '/admin/categories',

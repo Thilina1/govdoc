@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Loader2, Plus, ArrowLeft } from 'lucide-react';
-import { createCategory, getCategories, getAllCategories, getCategoryPath, CategoryState } from '@/app/actions/admin';
+import { createResourceCategory, getAllResourceCategories, getCategoryAncestors, ResourceState } from '@/app/actions/resources';
 import { useToast } from '@/hooks/use-toast';
 import { AdminHeader } from '@/components/admin/AdminHeader';
 
@@ -36,13 +36,13 @@ export default function NewCategoryForm({ admin }: { admin: AdminProfile }) {
     const [parentSelection, setParentSelection] = useState<string[]>([]);
     const finalParentId = parentSelection.length > 0 ? parentSelection[parentSelection.length - 1] : 'root';
 
-    const initialState: CategoryState = { error: undefined, success: undefined, message: undefined };
-    const [state, formAction, isPending] = useActionState(createCategory, initialState);
+    const initialState: ResourceState = { error: undefined, success: undefined, message: undefined };
+    const [state, formAction, isPending] = useActionState(createResourceCategory, initialState);
 
     const fetchCategories = async () => {
         setIsLoading(true);
         try {
-            const data = await getAllCategories();
+            const data = await getAllResourceCategories();
             setCategories(data);
         } catch (error) {
             console.error('Failed to load categories', error);
@@ -56,7 +56,7 @@ export default function NewCategoryForm({ admin }: { admin: AdminProfile }) {
             await fetchCategories();
             if (initialParentId) {
                 try {
-                    const path = await getCategoryPath(initialParentId);
+                    const path = await getCategoryAncestors(initialParentId);
                     if (path && path.length > 0) {
                         setParentSelection(path.map(c => String(c.id)));
                     }

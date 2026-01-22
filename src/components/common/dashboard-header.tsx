@@ -29,12 +29,14 @@ export default function DashboardHeader({
     scrollTo,
     servicesRef,
     user,
-    logoutAction
+    logoutAction,
+    variant = 'transparent'
 }: {
     scrollTo?: (ref: any) => void;
     servicesRef?: RefObject<HTMLDivElement | null>;
     user: UserProfile;
     logoutAction: () => void;
+    variant?: 'transparent' | 'opaque';
 }) {
     const [isScrolled, setIsScrolled] = useState(false);
 
@@ -48,36 +50,41 @@ export default function DashboardHeader({
         };
     }, []);
 
+    const isSolid = isScrolled || variant === 'opaque';
+
     return (
-        <header className={cn("fixed top-0 z-50 w-full transition-all duration-300", isScrolled ? 'bg-background/95 shadow-md backdrop-blur-sm' : 'bg-transparent')}>
-            <div className={cn("container flex h-20 items-center", isScrolled ? 'text-foreground' : 'text-white')}>
+        <header className={cn("fixed top-0 z-50 w-full transition-all duration-300", isSolid ? 'bg-background/95 shadow-md backdrop-blur-sm' : 'bg-transparent')}>
+            <div className={cn("container flex h-20 items-center", isSolid ? 'text-foreground' : 'text-white')}>
                 <div className="flex items-center">
                     <Link href="/dashboard" className="mr-6 flex items-center space-x-2">
                         {/* Logo Image removed as per user request */}
-                        <span className={cn("font-bold text-xl", isScrolled ? 'text-foreground' : 'text-white')}>GovDocs LK</span>
+                        <span className={cn("font-bold text-xl border-l-4 pl-4", isSolid ? 'text-foreground border-primary' : 'text-white border-white')}>GovDocs LK</span>
                     </Link>
                 </div>
 
                 <nav className="hidden md:flex items-center space-x-6 text-sm font-medium ml-auto">
-                    {scrollTo && servicesRef ? (
-                        <button onClick={() => scrollTo(servicesRef)} className={cn("transition-colors", isScrolled ? "text-foreground/80 hover:text-primary" : "text-white/80 hover:text-white")}>
-                            Services
-                        </button>
-                    ) : (
-                        <Link href="/dashboard#services" className={cn("transition-colors", isScrolled ? "text-foreground/80 hover:text-primary" : "text-white/80 hover:text-white")}>
-                            Services
-                        </Link>
-                    )}
+                    <Link href="/dashboard" className={cn("transition-colors", isSolid ? "text-foreground/80 hover:text-primary" : "text-white/80 hover:text-white")}>
+                        Home
+                    </Link>
+                    <Link href="/services" className={cn("transition-colors", isSolid ? "text-foreground/80 hover:text-primary" : "text-white/80 hover:text-white")}>
+                        Services
+                    </Link>
 
-                    <Link href="/dashboard#features" className={cn("transition-colors", isScrolled ? "text-foreground/80 hover:text-primary" : "text-white/80 hover:text-white")}>
+                    <Link href="/dashboard#features" className={cn("transition-colors", isSolid ? "text-foreground/80 hover:text-primary" : "text-white/80 hover:text-white")}>
                         Features
+                    </Link>
+                    <Link href="/#blog" className={cn("transition-colors", isSolid ? "text-foreground/80 hover:text-primary" : "text-white/80 hover:text-white")}>
+                        News
+                    </Link>
+                    <Link href="/#whats-new" className={cn("transition-colors", isSolid ? "text-foreground/80 hover:text-primary" : "text-white/80 hover:text-white")}>
+                        What's New
                     </Link>
                     <LanguageSwitcher />
 
                     {/* User Profile Dropdown */}
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className={cn("relative h-8 w-8 rounded-full", isScrolled ? "" : "hover:bg-white/20")}>
+                            <Button variant="ghost" className={cn("relative h-8 w-8 rounded-full", isSolid ? "" : "hover:bg-white/20")}>
                                 <Avatar className="h-9 w-9 border-2 border-white/20">
                                     <AvatarImage src="" alt={user.firstName} />
                                     <AvatarFallback>{user.firstName[0]}{user.lastName[0]}</AvatarFallback>
@@ -137,14 +144,10 @@ export default function DashboardHeader({
                                 <Link href="/dashboard/settings" className="font-bold text-lg flex items-center">
                                     Settings
                                 </Link>
-                                {scrollTo && servicesRef ? (
-                                    <button onClick={() => scrollTo(servicesRef)} className="font-bold text-lg text-left">
-                                        Services
-                                    </button>
-                                ) : (
-                                    <Link href="/dashboard#services" className="font-bold text-lg">Services</Link>
-                                )}
+                                <Link href="/services" className="font-bold text-lg">Services</Link>
                                 <Link href="#features" className="font-bold text-lg">Features</Link>
+                                <Link href="/#blog" className="font-bold text-lg">News</Link>
+                                <Link href="/#whats-new" className="font-bold text-lg">What's New</Link>
 
                                 <div className='flex flex-col gap-2 pt-4 mt-auto'>
                                     <Button variant="destructive" onClick={logoutAction} className="w-full justify-start">

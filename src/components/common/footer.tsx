@@ -50,34 +50,36 @@ export default function Footer() {
           {/* App Store Links */}
           <div className="md:col-span-4 flex flex-col items-start md:items-end">
             <div className="flex flex-col space-y-4 w-48">
-              <a href="#" className="flex items-center bg-neutral-800 border border-neutral-600 rounded-lg px-4 py-2 hover:bg-neutral-700">
-                <Apple className="w-6 h-6 mr-3" />
-                <div>
-                  <p className="text-xs">Download on the</p>
-                  <p className="text-lg font-semibold">App Store</p>
-                </div>
-              </a>
-              <a href="#" className="flex items-center bg-neutral-800 border border-neutral-600 rounded-lg px-4 py-2 hover:bg-neutral-700">
-                <Smartphone className="w-6 h-6 mr-3" />
-                <div>
-                  <p className="text-xs">GET IT ON</p>
-                  <p className="text-lg font-semibold">Google Play</p>
-                </div>
-              </a>
+              <div className="relative w-40 h-14 cursor-pointer hover:opacity-90 transition-opacity">
+                <Image
+                  src="/icon/appStore.png"
+                  alt="Download on the App Store"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <div className="relative w-40 h-14 cursor-pointer hover:opacity-90 transition-opacity">
+                <Image
+                  src="/icon/playStore.png"
+                  alt="Get it on Google Play"
+                  fill
+                  className="object-contain"
+                />
+              </div>
             </div>
           </div>
         </div>
-        
+
         <div className="border-t border-neutral-800 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center text-sm text-neutral-400">
             <div className="flex flex-wrap gap-x-6 gap-y-2 mb-4 md:mb-0">
-               <Link href="#" className="flex items-center gap-2 hover:text-white">
-                  Terms of Service <ExternalLink size={14} />
-                </Link>
+              <Link href="#" className="flex items-center gap-2 hover:text-white">
+                Terms of Service <ExternalLink size={14} />
+              </Link>
               <Link href="#" className="hover:text-white">Privacy Policy</Link>
-               <Link href="#" className="flex items-center gap-2 hover:text-white">
-                  Report Vulnerability <ExternalLink size={14} />
-                </Link>
+              <Link href="#" className="flex items-center gap-2 hover:text-white">
+                Report Vulnerability <ExternalLink size={14} />
+              </Link>
             </div>
             <p className="text-center md:text-right">
               &copy; {currentYear} GovDocs LK. All rights reserved.
