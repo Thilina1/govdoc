@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { Search, Folder, FileText, ArrowRight, ExternalLink } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import CategoryIcon from '@/components/admin/CategoryIcon';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -156,7 +157,7 @@ export default function ServicesClient({ user, categories = [], services = [] }:
                                     >
                                         <div className="flex items-center justify-between mb-2">
                                             <div className="bg-yellow-50 p-2 rounded-lg group-hover:bg-yellow-100 transition-colors">
-                                                <Folder className="w-6 h-6 text-yellow-600" />
+                                                <CategoryIcon iconName={cat.icon} className="w-6 h-6 text-yellow-600" />
                                             </div>
                                             <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-primary -translate-x-1 group-hover:translate-x-0 transition-transform" />
                                         </div>
@@ -175,31 +176,27 @@ export default function ServicesClient({ user, categories = [], services = [] }:
                             </h3>
                             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 {filteredServices.map((service) => (
-                                    <Card key={service.id} className="hover:shadow-lg transition-all duration-300 border-gray-200 group">
-                                        <CardHeader>
-                                            <div className="flex justify-between items-start">
-                                                <Badge variant="secondary" className="mb-3 bg-blue-50 text-blue-700 hover:bg-blue-100 border-blue-100">
-                                                    {service.categories?.name || 'Service'}
-                                                </Badge>
-                                                {service.file_url && <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-primary transition-colors" />}
-                                            </div>
-                                            <CardTitle className="text-lg leading-snug group-hover:text-primary transition-colors">{service.name}</CardTitle>
-                                            <CardDescription className="line-clamp-2 mt-2">
-                                                {service.description}
-                                            </CardDescription>
-                                        </CardHeader>
-                                        <CardContent>
-                                            <Button size="sm" variant="outline" className="w-full group-hover:border-primary/50 group-hover:bg-primary/5" asChild>
-                                                {service.file_url ? (
-                                                    <a href={service.file_url} target="_blank" rel="noopener noreferrer">
-                                                        View Document
-                                                    </a>
-                                                ) : (
-                                                    <span className="text-muted-foreground">No Preview</span>
-                                                )}
-                                            </Button>
-                                        </CardContent>
-                                    </Card>
+                                    <Link key={service.id} href={`/services/${service.id}`} className="block h-full">
+                                        <Card className="hover:shadow-lg transition-all duration-300 border-gray-200 group h-full flex flex-col">
+                                            <CardHeader>
+                                                <div className="flex justify-between items-start">
+                                                    <Badge variant="secondary" className="mb-3 bg-blue-50 text-blue-700 hover:bg-blue-100 border-blue-100">
+                                                        {service.categories?.name || 'Service'}
+                                                    </Badge>
+                                                    <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-primary transition-colors" />
+                                                </div>
+                                                <CardTitle className="text-lg leading-snug group-hover:text-primary transition-colors">{service.name}</CardTitle>
+                                                <CardDescription className="line-clamp-2 mt-2">
+                                                    {service.description}
+                                                </CardDescription>
+                                            </CardHeader>
+                                            <CardContent className="mt-auto">
+                                                <Button size="sm" variant="secondary" className="w-full group-hover:bg-primary group-hover:text-white transition-colors">
+                                                    View Details
+                                                </Button>
+                                            </CardContent>
+                                        </Card>
+                                    </Link>
                                 ))}
                             </div>
                         </div>

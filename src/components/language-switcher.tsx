@@ -18,7 +18,7 @@ export default function LanguageSwitcher({ className }: { className?: string }) 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className={className}>
+        <Button variant="ghost" size="icon" className={className} suppressHydrationWarning>
           <Globe className="h-[1.2rem] w-[1.2rem]" />
           <span className="sr-only">Toggle language</span>
         </Button>

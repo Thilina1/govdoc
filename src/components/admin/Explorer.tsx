@@ -3,23 +3,25 @@
 import { useState, useEffect, useTransition } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { getResourceCategories, getResourcesByCategory, getCategoryAncestors } from '@/app/actions/resources';
-import { ArrowLeft, Loader2, Plus } from 'lucide-react';
+import { getCategories, getServices, getCategoryPath } from '@/app/actions/admin';
+import { ArrowLeft, Loader2, Plus, FileText, Pencil } from 'lucide-react';
 import Link from 'next/link';
 import { AdminSearch } from './AdminSearchInput';
 import { AdminHeader, AdminProfile } from './AdminHeader';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { ChevronRight, Folder, FileText } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
+import CategoryIcon from './CategoryIcon';
 
 type Category = {
     id: string;
     name: string;
     parent_id: string | null;
+    icon?: string;
 };
 
 type Service = {
     id: string;
-    title: string;
+    name: string;
     category_id: string;
     description?: string;
     slug?: string;
@@ -42,12 +44,12 @@ export default function Explorer({ admin }: { admin: AdminProfile }) {
             setLoading(true);
             try {
                 const [cats, servs, path] = await Promise.all([
-                    getResourceCategories(currentId),
-                    getResourcesByCategory(currentId || ''),
-                    currentId ? getCategoryAncestors(currentId) : []
+                    getCategories(currentId),
+                    getServices(currentId || ''),
+                    currentId ? getCategoryPath(currentId) : []
                 ]);
                 setCategories(cats);
-                setServices(servs);
+                setServices(servs as Service[]);
                 setParents(path);
             } catch (e) {
                 console.error(e);
@@ -77,13 +79,11 @@ export default function Explorer({ admin }: { admin: AdminProfile }) {
                 <div className="flex gap-2">
                     <Button asChild size="sm" variant="outline">
                         {/* 
-                            For now, linking to a generic 'resource' type. 
-                            If currentId exists, we can pass it as categoryId.
-                            The [type] param in /admin/resources/[type]/new is required.
-                            We'll use 'general' or derive it from the parent if possible, but 'upload' is safe.
+                            Link to /admin/services/new for creating actual Services.
+                            If currentId exists, pre-select it as categoryId.
                         */}
-                        <Link href={`/admin/resources/upload/new${currentId ? `?categoryId=${currentId}` : ''}`}>
-                            <FileText className="mr-2 h-4 w-4" /> Add Resource
+                        <Link href={`/admin/services/new${currentId ? `?categoryId=${currentId}` : ''}`}>
+                            <FileText className="mr-2 h-4 w-4" /> Add Service
                         </Link>
                     </Button>
                     <Button asChild size="sm">
@@ -102,24 +102,38 @@ export default function Explorer({ admin }: { admin: AdminProfile }) {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {/* Categories */}
                     {categories.map((cat) => (
-                        <Link
-                            key={cat.id}
-                            href={`/admin/categories?parentId=${cat.id}`}
-                            className="block"
-                        >
-                            <Card className="hover:bg-accent/50 transition-colors cursor-pointer h-full">
+                        <div key={cat.id} className="relative group block">
+                            {/* Main navigation link overlay */}
+                            <Link
+                                href={`/admin/categories?parentId=${cat.id}`}
+                                className="absolute inset-0 z-10 rounded-xl"
+                                aria-label={`Open ${cat.name}`}
+                            />
+                            <Card className="hover:bg-accent/50 transition-colors h-full">
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                     <div className="flex items-center gap-2">
-                                        <Folder className="h-4 w-4 text-blue-500" />
+                                        <CategoryIcon iconName={cat.icon} className="h-4 w-4 text-blue-500" />
                                         <CardTitle className="text-sm font-medium">{cat.name}</CardTitle>
                                     </div>
-                                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                                    <div className="flex items-center gap-1 relative z-20">
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            className="h-6 w-6"
+                                            asChild
+                                        >
+                                            <Link href={`/admin/categories/${cat.id}/edit`}>
+                                                <Pencil className="h-3 w-3 text-muted-foreground hover:text-primary" />
+                                            </Link>
+                                        </Button>
+                                        <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                                    </div>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="text-xs text-muted-foreground">Category</div>
                                 </CardContent>
                             </Card>
-                        </Link>
+                        </div>
                     ))}
 
                     {/* Services */}
@@ -128,8 +142,13 @@ export default function Explorer({ admin }: { admin: AdminProfile }) {
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                 <div className="flex items-center gap-2">
                                     <FileText className="h-4 w-4 text-green-500" />
-                                    <CardTitle className="text-sm font-medium">{service.title}</CardTitle>
+                                    <CardTitle className="text-sm font-medium">{service.name}</CardTitle>
                                 </div>
+                                <Button variant="ghost" size="icon" asChild>
+                                    <Link href={`/admin/services/${service.id}/edit`}>
+                                        <Pencil className="h-4 w-4 text-muted-foreground hover:text-primary" />
+                                    </Link>
+                                </Button>
                             </CardHeader>
                             <CardContent>
                                 <div className="text-xs text-muted-foreground line-clamp-2">

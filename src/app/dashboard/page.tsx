@@ -2,15 +2,12 @@
 import { getUserProfile } from '@/lib/auth-service';
 import { redirect } from 'next/navigation';
 import DashboardClient from './dashboard-client';
-import { cookies } from 'next/headers';
 
 export default async function DashboardPage() {
     const user = await getUserProfile();
 
+
     if (!user) {
-        // Clear cookie if invalid to be safe
-        const cookieStore = await cookies();
-        cookieStore.delete('session');
         redirect('/login');
     }
 

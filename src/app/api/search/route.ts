@@ -34,16 +34,8 @@ export async function POST(req: NextRequest) {
             }
         }
 
-        // Smart Skip: If we find direct matches, skip AI (Cost Saving)
-        // We skip AI if we found services/categories AND the query is likely a keyword search (< 20 chars)
-        // or if we found a very strong match (exact name match logic is implicit in searchGlobal's ilike for now)
-        if ((directResults.services.length > 0 || directResults.categories.length > 0) && query.length < 50) {
-            return NextResponse.json({
-                answer: `I found ${directResults.services.length} services and ${directResults.categories.length} categories matching "${query}".`,
-                sources: [],
-                directMatches: directResults
-            });
-        }
+        // Smart Skip Logic REMOVED per user request.
+        // We now ALWAYS generate an AI answer if possible, even if direct matches are found.
 
         // 2. Indirect Search (Vector)
         const supabase = createAdminClient();

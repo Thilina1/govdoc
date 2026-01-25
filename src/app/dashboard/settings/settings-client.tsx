@@ -121,9 +121,7 @@ export default function SettingsClient({ user }: { user: any }) {
 
     return (
         <div className="flex flex-col min-h-screen bg-background font-sans">
-            <div className="bg-black/95">
-                <DashboardHeader user={headerUser} logoutAction={async () => await logoutUser()} />
-            </div>
+            <DashboardHeader user={headerUser} logoutAction={async () => await logoutUser()} variant="opaque" />
 
             <main className="flex-1 container mx-auto py-10 px-4">
                 <h1 className="text-3xl font-bold mb-8">Account Settings</h1>

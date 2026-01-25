@@ -84,7 +84,7 @@ export default function DashboardHeader({
                     {/* User Profile Dropdown */}
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className={cn("relative h-8 w-8 rounded-full", isSolid ? "" : "hover:bg-white/20")}>
+                            <Button variant="ghost" className={cn("relative h-8 w-8 rounded-full", isSolid ? "" : "hover:bg-white/20")} suppressHydrationWarning>
                                 <Avatar className="h-9 w-9 border-2 border-white/20">
                                     <AvatarImage src="" alt={user.firstName} />
                                     <AvatarFallback>{user.firstName[0]}{user.lastName[0]}</AvatarFallback>
@@ -120,7 +120,7 @@ export default function DashboardHeader({
                     <LanguageSwitcher />
                     <Sheet>
                         <SheetTrigger asChild>
-                            <Button variant="ghost" size="icon">
+                            <Button variant="ghost" size="icon" suppressHydrationWarning>
                                 <Menu className="h-6 w-6" />
                                 <span className="sr-only">Open Menu</span>
                             </Button>

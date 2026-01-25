@@ -11,7 +11,7 @@ import { loginAdmin, LoginState } from '@/app/actions/auth';
 import { useRouter } from 'next/navigation';
 
 export default function AdminLoginPage() {
-    const initialState: LoginState = { error: undefined, success: undefined };
+    const initialState: LoginState = { error: '', success: false };
     const [state, formAction, isPending] = useActionState(loginAdmin, initialState);
     const router = useRouter();
 

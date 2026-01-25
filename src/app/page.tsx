@@ -1,9 +1,12 @@
-
 import { getUserProfile } from '@/lib/auth-service';
+import { getAllCategories } from '@/app/actions/admin';
 import HomeClient from './home-client';
 
 export default async function Home() {
-  const user = await getUserProfile();
+  const [user, categories] = await Promise.all([
+    getUserProfile(),
+    getAllCategories()
+  ]);
 
   let userProfile = null;
   if (user) {
@@ -14,5 +17,5 @@ export default async function Home() {
     };
   }
 
-  return <HomeClient user={userProfile} />;
+  return <HomeClient user={userProfile} categories={categories} />;
 }

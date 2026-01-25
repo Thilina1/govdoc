@@ -120,7 +120,7 @@ export async function registerUser(prevState: RegisterState, formData: FormData)
 }
 
 export type LoginState = {
-    error?: string;
+    error?: string | null;
     success?: boolean;
 };
 
@@ -131,7 +131,7 @@ export async function loginUser(prevState: LoginState, formData: FormData): Prom
     console.log(`[DEBUG] Login attempt for: ${email}`);
 
     if (!email || !password) {
-        return { error: 'Email and password are required' };
+        return { error: 'Email and password are required', success: false };
     }
 
     try {
@@ -147,7 +147,7 @@ export async function loginUser(prevState: LoginState, formData: FormData): Prom
 
         if (error || !user) {
             console.log("[DEBUG] Supabase error or User not found:", error);
-            return { error: 'Invalid email or password' };
+            return { error: 'Invalid email or password', success: false };
         }
 
         console.log(`[DEBUG] User found. ID: ${user.id}`);
@@ -157,17 +157,17 @@ export async function loginUser(prevState: LoginState, formData: FormData): Prom
         console.log(`[DEBUG] Password match result: ${passwordMatch}`);
 
         if (!passwordMatch) {
-            return { error: 'Invalid email or password' };
+            return { error: 'Invalid email or password', success: false };
         }
 
         // 3. Create Session
         await createSession(user.id, 'user');
 
-        return { success: true };
+        return { success: true, error: null };
 
     } catch (err) {
         console.error('[DEBUG] Unexpected Login error:', err);
-        return { error: 'Authentication failed' };
+        return { error: 'Authentication failed', success: false };
     }
 }
 
@@ -178,7 +178,7 @@ export async function loginAdmin(prevState: LoginState, formData: FormData): Pro
     console.log(`[DEBUG] Admin Login attempt for: ${email}`);
 
     if (!email || !password) {
-        return { error: 'Email and password are required' };
+        return { error: 'Email and password are required', success: false };
     }
 
     try {
@@ -193,30 +193,30 @@ export async function loginAdmin(prevState: LoginState, formData: FormData): Pro
 
         if (error || !admin) {
             console.log("[DEBUG] Supabase error or Admin not found:", error);
-            return { error: 'Invalid admin credentials' };
+            return { error: 'Invalid admin credentials', success: false };
         }
 
         // 2. Verify password
         const passwordMatch = await bcrypt.compare(password, admin.password_hash);
         if (!passwordMatch) {
-            return { error: 'Invalid admin credentials' };
+            return { error: 'Invalid admin credentials', success: false };
         }
 
         // 3. Check if account is active
         // Assuming 'is_active' column exists.
         if (admin.is_active === false) {
             console.warn(`[AUTH] Inactive admin login attempt by ${email}`);
-            return { error: 'Account is inactive. Please contact support.' };
+            return { error: 'Account is inactive. Please contact support.', success: false };
         }
 
         // 4. Create Session
         await createSession(admin.id, 'admin');
 
-        return { success: true };
+        return { success: true, error: null };
 
     } catch (err) {
         console.error('[DEBUG] Unexpected Admin Login error:', err);
-        return { error: 'Authentication failed' };
+        return { error: 'Authentication failed', success: false };
     }
 }
 
@@ -228,15 +228,15 @@ export async function registerAdmin(prevState: LoginState, formData: FormData): 
     const confirmPassword = formData.get('confirmPassword') as string;
 
     if (!name || !email || !password || !confirmPassword) {
-        return { error: 'Name, email, and password are required' };
+        return { error: 'Name, email, and password are required', success: false };
     }
 
     if (password !== confirmPassword) {
-        return { error: 'Passwords do not match' };
+        return { error: 'Passwords do not match', success: false };
     }
 
     if (password.length < 8) {
-        return { error: 'Password must be at least 8 characters' };
+        return { error: 'Password must be at least 8 characters', success: false };
     }
 
     try {
@@ -259,16 +259,16 @@ export async function registerAdmin(prevState: LoginState, formData: FormData): 
         if (error) {
             console.error('Supabase Admin Register error:', error);
             if (error.code === '23505') {
-                return { error: 'Email already exists' };
+                return { error: 'Email already exists', success: false };
             }
-            return { error: 'Failed to create admin account: ' + error.message };
+            return { error: 'Failed to create admin account: ' + error.message, success: false };
         }
 
-        return { success: true };
+        return { success: true, error: null };
 
     } catch (err) {
         console.error('Admin Registration error:', err);
-        return { error: 'An unexpected error occurred' };
+        return { error: 'An unexpected error occurred', success: false };
     }
 }
 

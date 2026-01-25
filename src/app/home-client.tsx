@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, RefObject, useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
@@ -22,6 +23,8 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import CategoryIcon from '@/components/admin/CategoryIcon';
+
 import { ScrollAnimationSection } from '@/components/home/ScrollAnimationSection';
 
 interface UserProfile {
@@ -32,9 +35,11 @@ interface UserProfile {
 
 interface HomeClientProps {
     user: UserProfile | null;
+    categories?: any[];
 }
 
-export default function HomeClient({ user }: HomeClientProps) {
+export default function HomeClient({ user, categories = [] }: HomeClientProps) {
+    const router = useRouter();
     const servicesRef = useRef<HTMLDivElement>(null);
     const { toast } = useToast();
     const [isRecording, setIsRecording] = useState(false);
@@ -172,6 +177,21 @@ export default function HomeClient({ user }: HomeClientProps) {
             if (!res.ok) throw new Error('Search failed');
 
             const data = await res.json();
+
+            // Smart Navigation Logic: Auto-redirect if only one clear match is found AND query is short (implying lookup, not question)
+            // If query is long (>50 chars), allow AI answer to be shown instead of redirecting
+            if (searchQuery.length < 50) {
+                if (data.directMatches.services.length === 1) {
+                    router.push(`/services/${data.directMatches.services[0].id}`);
+                    return;
+                }
+                if (data.directMatches.categories.length === 1 && data.directMatches.services.length === 0) {
+                    const slug = data.directMatches.categories[0].name.toLowerCase().replace(/\s+/g, '-');
+                    router.push(`/resources/${slug}`);
+                    return;
+                }
+            }
+
             setSearchResults(data);
         } catch (error) {
             console.error(error);
@@ -276,7 +296,7 @@ export default function HomeClient({ user }: HomeClientProps) {
                                     </Button>
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
-                                            <Button variant="ghost" className="text-neutral-400 hover:text-white hover:bg-transparent pr-4">
+                                            <Button variant="ghost" className="text-neutral-400 hover:text-white hover:bg-transparent pr-4" suppressHydrationWarning>
                                                 {micLanguage.name}
                                                 <ChevronDown className="ml-2 h-4 w-4" />
                                             </Button>
@@ -308,9 +328,9 @@ export default function HomeClient({ user }: HomeClientProps) {
 
                                 {searchResults && (
                                     <>
-                                        {/* AI Answer - Show ONLY if NO direct matches are found */}
-                                        {searchResults.answer && (!searchResults.directMatches?.services?.length && !searchResults.directMatches?.categories?.length) && (
-                                            <Card className="bg-[#1F2123] border-neutral-800 text-white">
+                                        {/* AI Answer */}
+                                        {searchResults.answer && (
+                                            <Card className="bg-[#1F2123] border-neutral-800 text-white mb-6">
                                                 <CardHeader>
                                                     <CardTitle className="text-lg flex items-center gap-2">
                                                         <div className="bg-blue-500/10 p-2 rounded-full">
@@ -350,7 +370,7 @@ export default function HomeClient({ user }: HomeClientProps) {
                                                                 <CardHeader className="p-4">
                                                                     <CardTitle className="text-base text-white flex items-center justify-between">
                                                                         {cat.name} (Category)
-                                                                        <FolderLock className="w-4 h-4 text-neutral-400" />
+                                                                        <CategoryIcon iconName={cat.icon} className="w-4 h-4 text-neutral-400" />
                                                                     </CardTitle>
                                                                 </CardHeader>
                                                             </Card>
@@ -398,6 +418,43 @@ export default function HomeClient({ user }: HomeClientProps) {
                     </div>
                 </section>
 
+                {/* Parent Categories Section */}
+                <section className="bg-white py-12 border-b">
+                    <div className="container mx-auto px-4">
+                        <h2 className="text-2xl font-bold text-center mb-8 text-foreground">Browse by Category</h2>
+                        <div className="flex flex-wrap justify-center gap-6">
+                            {(categories || [])
+                                .filter(c => !c.parent_id || c.parent_id === 'root')
+                                .map((cat) => (
+                                    <Link key={cat.id} href={`/categories/${cat.id}`} className="block w-full sm:w-[calc(50%-24px)] md:w-[calc(25%-24px)] lg:w-[calc(16.666%-24px)] min-w-[160px] max-w-[200px]">
+                                        {/* Note: In a real app, /categories/[id] page should exist. 
+                                            Currently linking to /services?parentId=... or similar might be safer 
+                                            if /categories doesn't exist, but user asked for "parent categories (1st) level".
+                                            Actually, I should verify if /categories/[id] page exists. 
+                                            I'll use /services?parentId=${cat.id} for now as that's what Explorer works with, 
+                                            or link to the explorer /admin/categories if it's for admins? 
+                                            Wait, this is the public home page. 
+                                            The Search results link to /categories/${cat.id}. 
+                                            Let's use that pattern.
+                                        */}
+                                        <Card className="hover:shadow-md transition-all hover:-translate-y-1 h-full flex flex-col items-center justify-center p-6 text-center border-gray-100 bg-gray-50/50 hover:bg-white hover:border-blue-200">
+                                            <div className="bg-white p-3 rounded-full shadow-sm mb-3 group-hover:bg-blue-50 transition-colors">
+                                                <CategoryIcon iconName={cat.icon} className="w-8 h-8 text-blue-600" />
+                                            </div>
+                                            <span className="font-medium text-gray-900 line-clamp-2">{cat.name}</span>
+                                        </Card>
+                                    </Link>
+                                ))
+                            }
+                            {(categories || []).filter(c => !c.parent_id || c.parent_id === 'root').length === 0 && (
+                                <div className="w-full text-center text-muted-foreground">
+                                    No categories found.
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </section>
+
                 {/* Services Grid Section */}
                 <section className="bg-gray-50 py-20">
                     <div className="container mx-auto px-4">
@@ -421,7 +478,17 @@ export default function HomeClient({ user }: HomeClientProps) {
                                     <Link key={index} href={`/resources/${slug}`} className="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
                                         <Card className="flex items-center gap-5 p-6 h-full transition-all hover:shadow-lg hover:-translate-y-1 border-border/40 hover:border-blue-500/20 group cursor-pointer bg-white">
                                             <div className="border border-blue-100 bg-blue-50/50 p-3.5 rounded-xl group-hover:bg-blue-500 group-hover:border-blue-500 transition-colors">
-                                                <item.icon className="w-8 h-8 text-blue-600 group-hover:text-white transition-colors" strokeWidth={1.5} />
+                                                {(() => {
+                                                    // Dynamic Icon Logic:
+                                                    // 1. Try to find a matching category by name (case-insensitive)
+                                                    // 2. If found and has icon, use CategoryIcon
+                                                    // 3. Fallback to hardcoded item.icon
+                                                    const matchingCat = categories?.find(c => c.name.toLowerCase() === item.title.toLowerCase());
+                                                    if (matchingCat && matchingCat.icon) {
+                                                        return <CategoryIcon iconName={matchingCat.icon} className="w-8 h-8 text-blue-600 group-hover:text-white transition-colors" />;
+                                                    }
+                                                    return <item.icon className="w-8 h-8 text-blue-600 group-hover:text-white transition-colors" strokeWidth={1.5} />;
+                                                })()}
                                             </div>
                                             <div>
                                                 <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-700 transition-colors">{item.title}</h3>

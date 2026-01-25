@@ -3,8 +3,10 @@ import Header from '@/components/common/header';
 import Footer from '@/components/common/footer';
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, FileText, CheckCircle2, Info } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft, FileText, CheckCircle2, Info, Download } from 'lucide-react';
 import Link from 'next/link';
+import BackButton from '@/components/common/back-button';
 
 export default async function ServicePage({ params }: { params: Promise<{ id: string }> }) {
     const resolvedParams = await params;
@@ -22,10 +24,7 @@ export default async function ServicePage({ params }: { params: Promise<{ id: st
         <div className="flex flex-col min-h-screen bg-background font-sans">
             <Header variant="opaque" />
             <main className="flex-1 container mx-auto px-4 py-8 max-w-4xl">
-                <Link href="/" className="inline-flex items-center text-muted-foreground hover:text-foreground mb-6 transition-colors">
-                    <ArrowLeft className="w-4 h-4 mr-2" />
-                    Back to Search
-                </Link>
+                <BackButton />
 
                 <div className="space-y-8">
                     {/* Header Section */}
@@ -40,6 +39,16 @@ export default async function ServicePage({ params }: { params: Promise<{ id: st
                             <p className="text-xl text-muted-foreground leading-relaxed">
                                 {service.description}
                             </p>
+                        )}
+                        {service.file_url && (
+                            <div className="pt-4">
+                                <Button asChild size="lg" className="w-full md:w-auto">
+                                    <a href={service.file_url} target="_blank" rel="noopener noreferrer">
+                                        <Download className="w-5 h-5 mr-2" />
+                                        Download Document
+                                    </a>
+                                </Button>
+                            </div>
                         )}
                     </div>
 

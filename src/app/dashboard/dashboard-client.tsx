@@ -2,6 +2,7 @@
 'use client';
 
 import { useRef, RefObject, useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
@@ -31,6 +32,7 @@ interface UserProfile {
 // interface UserProfile { ... } (already defined)
 
 export default function DashboardClient({ user }: { user: UserProfile }) {
+    const router = useRouter();
     const servicesRef = useRef<HTMLDivElement>(null);
     const searchRef = useRef<HTMLDivElement>(null);
     const { toast } = useToast();
@@ -97,6 +99,9 @@ export default function DashboardClient({ user }: { user: UserProfile }) {
     }, [micLanguage]);
 
 
+    const [searchResults, setSearchResults] = useState<any>(null);
+    const [isSearching, setIsSearching] = useState(false);
+
     useEffect(() => {
         const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
         if (SpeechRecognition) {
@@ -114,7 +119,13 @@ export default function DashboardClient({ user }: { user: UserProfile }) {
                         interimTranscript += event.results[i][0].transcript;
                     }
                 }
-                setSearchQuery(finalTranscript + interimTranscript);
+                const transcript = finalTranscript + interimTranscript;
+                setSearchQuery(transcript);
+
+                // Auto-search on final result
+                if (finalTranscript) {
+                    handleSearch(finalTranscript);
+                }
             };
 
             recognitionRef.current.onerror = (event: any) => {
@@ -163,6 +174,50 @@ export default function DashboardClient({ user }: { user: UserProfile }) {
                     description: 'Could not start voice recognition. Please check your microphone.',
                 });
             }
+        }
+    };
+
+    const handleSearch = async (query: string) => {
+        if (!query.trim()) return;
+
+        setIsSearching(true);
+        setSearchResults(null);
+
+        try {
+            const res = await fetch('/api/search', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query }),
+            });
+
+            if (!res.ok) throw new Error('Search failed');
+
+            const data = await res.json();
+
+            // Smart Navigation Logic: Auto-redirect if only one clear match is found AND query is short (implying lookup, not question)
+            // If query is long (>50 chars), allow AI answer to be shown instead of redirecting
+            if (searchQuery.length < 50) {
+                if (data.directMatches.services.length === 1) {
+                    router.push(`/services/${data.directMatches.services[0].id}`);
+                    return;
+                }
+                if (data.directMatches.categories.length === 1 && data.directMatches.services.length === 0) {
+                    const slug = data.directMatches.categories[0].name.toLowerCase().replace(/\s+/g, '-');
+                    router.push(`/resources/${slug}`);
+                    return;
+                }
+            }
+
+            setSearchResults(data);
+        } catch (error) {
+            console.error(error);
+            toast({
+                variant: "destructive",
+                title: "Search Error",
+                description: "Failed to perform search. Please try again."
+            });
+        } finally {
+            setIsSearching(false);
         }
     };
 
@@ -240,6 +295,11 @@ export default function DashboardClient({ user }: { user: UserProfile }) {
                                         className="flex-1 bg-transparent border-none text-white placeholder:text-neutral-400 focus-visible:ring-0 focus-visible:ring-offset-0 text-base h-auto py-5"
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                handleSearch(searchQuery);
+                                            }
+                                        }}
                                     />
                                     <Button
                                         variant="ghost"
@@ -271,30 +331,99 @@ export default function DashboardClient({ user }: { user: UserProfile }) {
                                 </div>
                             </div>
                         </div>
+
+                        {/* Search Results Display */}
+                        {(isSearching || searchResults) && (
+                            <div className="w-full max-w-4xl mt-8 text-left space-y-6">
+                                {isSearching && (
+                                    <div className="text-center text-neutral-400 animate-pulse">
+                                        Thinking...
+                                    </div>
+                                )}
+
+                                {searchResults && (
+                                    <>
+                                        {/* AI Answer */}
+                                        {searchResults.answer && (
+                                            <Card className="bg-[#1F2123] border-neutral-800 text-white mb-6">
+                                                <CardHeader>
+                                                    <CardTitle className="text-lg flex items-center gap-2">
+                                                        <div className="bg-blue-500/10 p-2 rounded-full">
+                                                            <Smartphone className="w-4 h-4 text-blue-400" />
+                                                        </div>
+                                                        AI Answer
+                                                    </CardTitle>
+                                                </CardHeader>
+                                                <CardContent>
+                                                    <div className="prose prose-invert max-w-none">
+                                                        {searchResults.answer}
+                                                    </div>
+                                                </CardContent>
+                                            </Card>
+                                        )}
+
+                                        {/* Direct Matches */}
+                                        {(searchResults.directMatches?.services?.length > 0 || searchResults.directMatches?.categories?.length > 0) && (
+                                            <div className="space-y-4">
+                                                <h3 className="text-lg font-semibold text-neutral-300">Related Services & Categories</h3>
+                                                <div className="grid md:grid-cols-2 gap-4">
+                                                    {searchResults.directMatches.services.map((service: any) => (
+                                                        <Link key={service.id} href={`/services/${service.id}`} className="block">
+                                                            <Card className="bg-[#1F2123] border-neutral-800 hover:bg-neutral-800 transition-colors cursor-pointer">
+                                                                <CardHeader className="p-4">
+                                                                    <CardTitle className="text-base text-white flex items-center justify-between">
+                                                                        {service.name}
+                                                                        <ArrowRight className="w-4 h-4 text-neutral-400" />
+                                                                    </CardTitle>
+                                                                </CardHeader>
+                                                            </Card>
+                                                        </Link>
+                                                    ))}
+                                                    {searchResults.directMatches.categories.map((cat: any) => (
+                                                        <Link key={cat.id} href={`/categories/${cat.id}`} className="block">
+                                                            <Card className="bg-[#1F2123] border-neutral-800 hover:bg-neutral-800 transition-colors cursor-pointer">
+                                                                <CardHeader className="p-4">
+                                                                    <CardTitle className="text-base text-white flex items-center justify-between">
+                                                                        {cat.name} (Category)
+                                                                        <FolderLock className="w-4 h-4 text-neutral-400" />
+                                                                    </CardTitle>
+                                                                </CardHeader>
+                                                            </Card>
+                                                        </Link>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </>
+                                )}
+                            </div>
+                        )}
+
+
                         <div className="mt-8">
                             <h3 className="text-base font-normal mb-4 text-neutral-300">{currentTranslations.trendingSearches}</h3>
                             <div className="flex flex-wrap justify-center gap-3">
-                                <button onClick={() => setSearchQuery(currentTranslations.nic)} className="transition-transform duration-200 ease-in-out hover:scale-105">
+                                <button onClick={() => { setSearchQuery(currentTranslations.nic); handleSearch(currentTranslations.nic); }} className="transition-transform duration-200 ease-in-out hover:scale-105">
                                     <div className="animated-border-wrapper p-[1px] rounded-full">
                                         <Badge variant="outline" className="px-4 py-2 text-base rounded-full bg-[#1F2123] border-transparent text-neutral-300 hover:bg-neutral-800/80 hover:text-white cursor-pointer shadow-sm">{currentTranslations.nic}</Badge>
                                     </div>
                                 </button>
-                                <button onClick={() => setSearchQuery(currentTranslations.passport)} className="transition-transform duration-200 ease-in-out hover:scale-105">
+                                <button onClick={() => { setSearchQuery(currentTranslations.passport); handleSearch(currentTranslations.passport); }} className="transition-transform duration-200 ease-in-out hover:scale-105">
                                     <div className="animated-border-wrapper p-[1px] rounded-full">
                                         <Badge variant="outline" className="px-4 py-2 text-base rounded-full bg-[#1F2123] border-transparent text-neutral-300 hover:bg-neutral-800/80 hover:text-white cursor-pointer shadow-sm">{currentTranslations.passport}</Badge>
                                     </div>
                                 </button>
-                                <button onClick={() => setSearchQuery(currentTranslations.drivingLicense)} className="transition-transform duration-200 ease-in-out hover:scale-105">
+                                <button onClick={() => { setSearchQuery(currentTranslations.drivingLicense); handleSearch(currentTranslations.drivingLicense); }} className="transition-transform duration-200 ease-in-out hover:scale-105">
                                     <div className="animated-border-wrapper p-[1px] rounded-full">
                                         <Badge variant="outline" className="px-4 py-2 text-base rounded-full bg-[#1F2123] border-transparent text-neutral-300 hover:bg-neutral-800/80 hover:text-white cursor-pointer shadow-sm">{currentTranslations.drivingLicense}</Badge>
                                     </div>
                                 </button>
-                                <button onClick={() => setSearchQuery(currentTranslations.birthCertificate)} className="transition-transform duration-200 ease-in-out hover:scale-105">
+                                <button onClick={() => { setSearchQuery(currentTranslations.birthCertificate); handleSearch(currentTranslations.birthCertificate); }} className="transition-transform duration-200 ease-in-out hover:scale-105">
                                     <div className="animated-border-wrapper p-[1px] rounded-full">
                                         <Badge variant="outline" className="px-4 py-2 text-base rounded-full bg-[#1F2123] border-transparent text-neutral-300 hover:bg-neutral-800/80 hover:text-white cursor-pointer shadow-sm">{currentTranslations.birthCertificate}</Badge>
                                     </div>
                                 </button>
-                                <button onClick={() => setSearchQuery(currentTranslations.policeClearance)} className="transition-transform duration-200 ease-in-out hover:scale-105">
+                                <button onClick={() => { setSearchQuery(currentTranslations.policeClearance); handleSearch(currentTranslations.policeClearance); }} className="transition-transform duration-200 ease-in-out hover:scale-105">
                                     <div className="animated-border-wrapper p-[1px] rounded-full">
                                         <Badge variant="outline" className="px-4 py-2 text-base rounded-full bg-[#1F2123] border-transparent text-neutral-300 hover:bg-neutral-800/80 hover:text-white cursor-pointer shadow-sm">{currentTranslations.policeClearance}</Badge>
                                     </div>
@@ -356,7 +485,7 @@ export default function DashboardClient({ user }: { user: UserProfile }) {
                 <section className="bg-gray-50 py-12 border-b">
                     <div className="container mx-auto px-4">
                         <h2 className="text-2xl font-bold text-gray-800 mb-8 text-center">Government Resources</h2>
-                        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                        <div className="flex flex-wrap justify-center gap-4">
                             {[
                                 { title: 'Gazette', slug: 'gazette', bg: 'bg-blue-100', icon: FileText, color: 'text-blue-600', description: 'Government Gazettes' },
                                 { title: 'Document', slug: 'document', bg: 'bg-indigo-100', icon: Files, color: 'text-indigo-600', description: 'Government Documents' },
@@ -370,7 +499,11 @@ export default function DashboardClient({ user }: { user: UserProfile }) {
                                 { title: 'Jobs', slug: 'jobs', bg: 'bg-green-100', icon: Briefcase, color: 'text-green-600', description: 'Government Jobs' },
                                 { title: 'Results', slug: 'results', bg: 'bg-emerald-100', icon: Trophy, color: 'text-emerald-600', description: 'Lottery Results' },
                             ].map((item, index) => (
-                                <Link href={`/resources/${item.slug}`} key={index} className="block group">
+                                <Link
+                                    href={`/resources/${item.slug}`}
+                                    key={index}
+                                    className="block group w-[calc(50%-0.5rem)] md:w-[calc(25%-0.75rem)] lg:w-[calc(16.666%-0.85rem)]"
+                                >
                                     <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all h-full text-center flex flex-col items-center">
                                         <div className={`w-12 h-12 rounded-full ${item.bg} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform`}>
                                             <item.icon className={`w-6 h-6 ${item.color}`} />

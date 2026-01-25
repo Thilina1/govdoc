@@ -9,7 +9,7 @@ export async function getCategories(parentId: string | null = null) {
     const supabase = createAdminClient();
     let query = supabase
         .from('categories')
-        .select('id, name, parent_id');
+        .select('id, name, parent_id, icon');
 
     if (parentId) {
         query = query.eq('parent_id', parentId);
@@ -31,7 +31,7 @@ export async function getAllCategories() {
     const supabase = createAdminClient();
     const { data, error } = await supabase
         .from('categories')
-        .select('id, name, parent_id')
+        .select('id, name, parent_id, icon')
         .order('name', { ascending: true });
 
     if (error) {
@@ -93,6 +93,8 @@ export async function getServiceById(id: string) {
             description,
             category_id,
             custom_details,
+            references,
+            file_url,
             categories:category_id (name)
         `)
         .eq('id', id)
@@ -142,7 +144,7 @@ export async function searchGlobal(term: string) {
 
     const { data: categories, error: catError } = await supabase
         .from('categories')
-        .select('id, name, parent_id')
+        .select('id, name, parent_id, icon')
         .ilike('name', `%${term}%`)
         .limit(10);
 
@@ -168,6 +170,7 @@ export async function createCategory(prevState: CategoryState, formData: FormDat
     const name = formData.get('name') as string;
     const rawParentId = formData.get('parentId') as string;
     const parentId = (rawParentId && rawParentId !== 'root') ? rawParentId : null;
+    const icon = formData.get('icon') as string || 'Folder';
     // Order field is removed as per user request
 
     if (!name) {
@@ -180,6 +183,7 @@ export async function createCategory(prevState: CategoryState, formData: FormDat
         .insert({
             name,
             parent_id: parentId,
+            icon,
         });
 
     if (error) {
@@ -190,6 +194,52 @@ export async function createCategory(prevState: CategoryState, formData: FormDat
     revalidatePath('/admin/categories');
     revalidatePath('/admin/services/new');
     return { success: true, message: 'Category created successfully' };
+}
+
+export async function updateCategory(prevState: CategoryState, formData: FormData): Promise<CategoryState> {
+    const id = formData.get('id') as string;
+    const name = formData.get('name') as string;
+    const rawParentId = formData.get('parentId') as string;
+    const parentId = (rawParentId && rawParentId !== 'root') ? rawParentId : null;
+    const icon = formData.get('icon') as string || 'Folder';
+
+    if (!id || !name) {
+        return { error: 'Category ID and name are required' };
+    }
+
+    const supabase = createAdminClient();
+    const { error } = await supabase
+        .from('categories')
+        .update({
+            name,
+            parent_id: parentId,
+            icon,
+        })
+        .eq('id', id);
+
+    if (error) {
+        console.error('Error updating category:', error);
+        return { error: 'Failed to update category: ' + error.message };
+    }
+
+    revalidatePath('/admin/categories');
+    revalidatePath(`/admin/categories/${id}/edit`);
+    return { success: true, message: 'Category updated successfully' };
+}
+
+export async function getCategoryById(id: string) {
+    const supabase = createAdminClient();
+    const { data, error } = await supabase
+        .from('categories')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+    if (error) {
+        console.error('Error fetching category by id:', error);
+        return null;
+    }
+    return data;
 }
 
 export type ServiceState = {
@@ -203,6 +253,7 @@ export async function createService(prevState: ServiceState, formData: FormData)
     const categoryId = formData.get('categoryId') as string;
     const description = formData.get('description') as string;
     const customDetailsJson = formData.get('customDetails') as string;
+    const referencesJson = formData.get('references') as string;
     const fileUrl = formData.get('fileUrl') as string;
 
     if (!name || !categoryId) {
@@ -218,6 +269,15 @@ export async function createService(prevState: ServiceState, formData: FormData)
         return { error: 'Invalid JSON for custom details' };
     }
 
+    let references = [];
+    try {
+        if (referencesJson) {
+            references = JSON.parse(referencesJson);
+        }
+    } catch (e) {
+        return { error: 'Invalid JSON for references' };
+    }
+
     const supabase = createAdminClient();
 
     // 1. Create Service
@@ -228,6 +288,7 @@ export async function createService(prevState: ServiceState, formData: FormData)
             name,
             description,
             custom_details: customDetails,
+            references: references,
             file_url: fileUrl || null,
         })
         .select()
@@ -239,6 +300,60 @@ export async function createService(prevState: ServiceState, formData: FormData)
     }
 
     return { success: true, message: 'Service created successfully' };
+}
+
+export async function updateService(prevState: ServiceState, formData: FormData): Promise<ServiceState> {
+    const id = formData.get('id') as string;
+    const name = formData.get('name') as string;
+    const categoryId = formData.get('categoryId') as string;
+    const description = formData.get('description') as string;
+    const customDetailsJson = formData.get('customDetails') as string;
+    const referencesJson = formData.get('references') as string;
+    const fileUrl = formData.get('fileUrl') as string;
+
+    if (!id || !name || !categoryId) {
+        return { error: 'Service ID, name and category are required' };
+    }
+
+    let customDetails = {};
+    try {
+        if (customDetailsJson) {
+            customDetails = JSON.parse(customDetailsJson);
+        }
+    } catch (e) {
+        return { error: 'Invalid JSON for custom details' };
+    }
+
+    let references = [];
+    try {
+        if (referencesJson) {
+            references = JSON.parse(referencesJson);
+        }
+    } catch (e) {
+        return { error: 'Invalid JSON for references' };
+    }
+
+    const supabase = createAdminClient();
+
+    const { error: serviceError } = await supabase
+        .from('services')
+        .update({
+            category_id: categoryId,
+            name,
+            description,
+            custom_details: customDetails,
+            references: references,
+            file_url: fileUrl || null,
+        })
+        .eq('id', id);
+
+    if (serviceError) {
+        console.error('Error updating service:', serviceError);
+        return { error: 'Failed to update service: ' + serviceError.message };
+    }
+
+    revalidatePath('/admin/categories');
+    return { success: true, message: 'Service updated successfully' };
 }
 
 export async function getUserCount() {
@@ -272,7 +387,7 @@ export async function getCategoryByName(name: string) {
     const supabase = createAdminClient();
     const { data, error } = await supabase
         .from('categories')
-        .select('id, name, parent_id')
+        .select('id, name, parent_id, icon')
         .ilike('name', name)
         .single(); // ilike matches case-insensitive
 

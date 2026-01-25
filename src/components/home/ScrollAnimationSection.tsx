@@ -71,7 +71,7 @@ export function ScrollAnimationSection() {
                     className="absolute inset-0 z-0"
                 >
                     <Image
-                        src="/10-bg-final.webp"
+                        src="/image.png"
                         alt="Background"
                         fill
                         className="object-cover opacity-50"
